@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savoney | Expense Tracker</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <link rel="stylesheet" href="style3.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+    <!-- -------------header---------------- -->
+    <header>
+        <div id="home" class="home">
+            <!-- ------------------nav-------------- -->
+            <nav>
+                <i class='bx bx-menu' ></i>
+                <h1>Savoney</h1>
+            </nav>
+            <!-- ------------------sidebar-------------- -->
+            <div id="sidebar">
+                <div class="sidebar_menu">
+                    <ul id="list">
+                        <li><a class="listItem" href="#dashboard">
+                                <i class='bx bx-home'></i>
+                                Dashboard
+                            </a></li>
+                        <li><a class="listItem" href="#income">
+                                <i class='bx bx-bar-chart-alt-2'></i>
+                                Income
+                            </a></li>
+                        <li><a class="listItem" href="#budget">
+                                <i class='bx bx-bell'></i>
+                                Budget
+                            </a></li>
+                        <li><a class="listItem" href="#expense">
+                                <i class="bx bx-message-rounded icon"></i>
+                                Expense
+                            </a></li>
+                        <li><a class="listItem" href="#" id="reset">
+                                <i class="bx bx-pie-chart-alt-2 icon"></i>
+                                Reset
+                            </a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- --------------------heading--------------- -->
+            <div class="heading">
+                <h1>Welcome to SAVONEY</h1>
+            </div>
+        </div>
+    </header>
+
+    <!--  -------------DASHBOARD---------------------  -->
+    <div class="animate-on-show dashboard" id="dashboard">
+        <div class="dashboard_box">
+            <div class="container">
+                <div class="Heading-dash icon">
+                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <h2>Dashboard</h2>
+                </div>
+                <div class="dashboard_content">
+                    <div class="item">
+                        <ul>
+                            <li><i class="uil uil-thumbs-up"></i></li>
+                            <li>
+                                <h3>Total Balance</h3>
+                            </li>
+                            <li>
+                                <h2 id="total_balance">0</h2>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="item">
+                        <ul>
+                            <li><i class="uil uil-comments"></i></li>
+                            <li>
+                                <h3>Total Income</h3>
+                            </li>
+                            <li>
+                                <h2 id="total_income">0</h2>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="item">
+                        <ul>
+                            <li><i class="uil uil-share"></i></li>
+                            <li>
+                                <h3>Total Expense</h3>
+                            </li>
+                            <li>
+                                <h2 id="total_expense">0</h2>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ------------------Income----------------- -->
+    <section class=" income" id="income">
+        <!-- ------------------Income Details----------------- -->
+        <div class="incomeContent animate-on-show">
+            <div class="container">
+                <div class="Heading icon">
+                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <h2>Income Details</h2>
+                </div>
+                <div class="income_content">
+                    <div class="income-form">
+                        <form action="" id="income-form">
+                            <label for="amount">
+                                <div class="form-list">
+                                    <h4>Amount</h4>
+                                    <input type="number" id="amount" placeholder="Enter Amount" required>
+                                </div>
+                            </label>
+                            <label for="date">
+                                <div class="form-list">
+                                    <h4>Date</h4>
+                                    <input type="date" id="date" placeholder="dd-mm-yyy" required>
+                                </div>
+                            </label>
+                            <label for="remarks">
+                                <div class="form-list">
+                                    <h4>Remarks</h4>
+                                    <input type="text" id="remarks" placeholder="Enter your income remarks">
+                                </div>
+                            </label>
+                            <label for="source">
+                                <div class="form-list">
+                                    <h4>Types of source</h4>
+                                    <select name="source" id="source">
+                                        <option value="select-type">Select type</option>
+                                        <option value="earning">Earning</option>
+                                        <option value="saving">Saving</option>
+                                        <option value="others">Others</option>
+                                    </select>
+                                </div>
+                            </label>
+                        </form>
+                    </div>
+                    <button class="btn" id="income-btn" onclick="
+                    updateChart();
+                    addIncomeList();
+
+                    ">
+                        Add
+                        <i class="uil uil-navigator"></i>
+                    </button>
+                </div>
+            </div>
+
+
+
+            <!-- --------------------------income history-------------- -->
+
+            <div class="container animate-on-show">
+                <div class="Heading icon">
+                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <h2>Income History</h2>
+                </div>
+                <div class="income-history-content">
+
+                </div>
+            </div>
+
+
+
+            <!-- --------------------------income chart---------------- -->
+
+            <div class="container animate-on-show">
+                <div class="Heading icon">
+                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <h2>Income Chart</h2>
+                </div>
+                <div class="income-chart-content">
+                    <canvas id="myPieChart" width="500" height="500"></canvas>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ====================Budget==================== -->
+    <section class=" budget" id="budget">
+        <!-- -----------------------Budget details--------------------- -->
+        <div class="budgetContent animate-on-show">
+            <div class="container">
+                <div class="Heading icon">
+                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <h2>Budget Details</h2>
+                </div>
+                <div class="budget_content">
+                    <div class="budget-form">
+                        <form action="" id="budget-form" method="post">
+                            <label for="budget-amount">
+                                <div class="form-list">
+                                    <h4>Budget</h4>
+                                    <input type="number" id="budget-amount" placeholder="Enter Amount" required>
+                                </div>
+                            </label>
+                            <label for="budget-type">
+                                <div class="form-list">
+                                    <h4>Type</h4>
+                                    <input type="text" id="budget-type" placeholder="Enter Type" required>
+                                </div>
+                            </label>
+                        </form>
+                    </div>
+                    <button class="btn" id="budget-btn">
+                        Next
+                        <i class="uil uil-navigator"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ---------------------Budget List----------- -->
+
+        <div class="budgetList animate-on-show">
+            <div class="container">
+                <div class="Heading Heading-budget icon">
+                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <h2>Budget List</h2>
+                </div>
+                <div class="budget-list-content">
+
+                    <!-- ---budget bars---- -->
+                    <div class="container budget-bar-container">
+                        <div id="budget-bars"></div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================Expense================= -->
+    <section class=" expense" id="expense">
+        <!-- ------------------expense Details----------------- -->
+        <div class="expenseContent animate-on-show">
+            <div class="container">
+                <div class="Heading icon">
+                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <h2>Expense Details</h2>
+                </div>
+                <div class="expense_content">
+                    <div class="expense-form">
+                        <form action="" id="expense-form">
+                            <label for="expense-amount">
+                                <div class="form-list">
+                                    <h4>Expense</h4>
+                                    <input type="number" id="expense-amount" placeholder="Enter your expense" required>
+                                </div>
+                            </label>
+                            <label for="expense-date">
+                                <div class="form-list">
+                                    <h4>Date</h4>
+                                    <input type="date" id="expense-date" placeholder="dd-mm-yyy" required>
+                                </div>
+                            </label>
+                            <label for="expense-remarks">
+                                <div class="form-list">
+                                    <h4>Remarks</h4>
+                                    <input type="text" id="expense-remarks" placeholder="Enter expense remarks">
+                                </div>
+                            </label>
+                            <label for="expense-source">
+                                <div class="form-list">
+                                    <h4>Types of source</h4>
+                                    <select name="source" id="expense-source">
+                                        <option value="select-type">Select type</option>
+                                    </select>
+                                </div>
+                            </label>
+                        </form>
+                    </div>
+                    <button class="btn" id="expense-btn" onclick="
+                    updateExpenseChart();
+                    addExpenseList();
+                    addExpense();
+                    ">
+                        Next
+                        <i class="uil uil-navigator"></i>
+                    </button>
+                </div>
+            </div>
+
+
+
+            <!-- --------------------------expense history-------------------- -->
+
+            <div class="container animate-on-show">
+                <div class="Heading icon">
+                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <h2>Expense History</h2>
+                </div>
+                <div class="expense-history-content">
+
+                </div>
+            </div>
+
+
+
+            <!-- --------------------------expense chart---------------- -->
+
+            <div class="container animate-on-show">
+                <div class="Heading icon">
+                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <h2>Expense Chart</h2>
+                </div>
+                <div class="expense-chart-content">
+                    <canvas id="myExpensePieChart" width="500" height="500"></canvas>
+                </div>
+            </div>
+            
+            
+        </div>
+    </section>
+
+    <!-- ===============footer=================== -->
+    <footer>
+        made with ❤️ by <span>Priya</span>
+    </footer>
+
+    <script src="script2.js"></script>
+
+</body>
+
+
+
+</html>

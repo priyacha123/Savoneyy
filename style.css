@@ -1,0 +1,718 @@
+@import url("https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playwrite+DE+VA+Guides&family=Satisfy&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Noto+Serif:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Playwrite+DE+VA+Guides&family=Raleway:ital,wght@0,100..900;1,100..900&family=Satisfy&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+.Heading {
+  width: 70vw;
+  display: flex;
+  justify-content: flex-start;
+  border-bottom: 2px solid black;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.icon i {
+  background-color: #4070f4;
+  color: white;
+  font-size: 30px;
+  border-radius: 10px;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 2px 5px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+/* =================navbar================= */
+
+nav {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  text-align: center;
+  z-index: 10;
+  height: 70px;
+  width: 100vw;
+  background-color: white;
+}
+nav i {
+  margin-right: 20px;
+  margin-left: 20px;
+  font-size: 24px;
+  align-content: center;
+  cursor: pointer;
+}
+nav h1 {
+  font-size: 22px;
+  color: #333;
+  margin-right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Open Sans", serif;
+}
+
+.heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  color: white;
+  background-image: url(https://savoney.netlify.app/assessts/bg916.svg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position-y: bottom;
+}
+.heading h1 {
+  font-size: 48px;
+}
+
+/* --------------------sidebar-------------------------- */
+#sidebar {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 270px;
+  height: 100vh;
+  background-color: white;
+  color: white;
+  transition: left 0.3s ease-in-out;
+}
+.sidebar_menu {
+  margin: 75px 30px;
+  padding: 5px;
+}
+.sidebar_menu ul {
+  padding: 0;
+}
+.sidebar_menu li {
+  list-style-type: none;
+  margin: 20px 0 40px;
+}
+.sidebar_menu a {
+  font-size: 17px;
+  text-decoration: none;
+  color: gray;
+}
+.sidebar_menu i {
+  padding-right: 10px;
+  font-size: 20px;
+}
+
+/* -------------DASHBOARD--------------------- */
+.dashboard_box {
+  margin: 0 0.6rem;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.Heading-dash {
+  width: 95vw;
+  display: flex;
+  justify-content: flex-start;
+  border-bottom: 2px solid black;
+  align-items: center;
+  margin: 5px 0;
+}
+
+/* .icon i{
+    background-color: #4070f4;
+    color: white;
+    font-size: 30px;
+    border-radius: 10px;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 2px 5px;
+    margin: 10px;
+    cursor: pointer;
+} */
+.dashboard_content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10vh 0;
+}
+.item {
+  font-size: 18px;
+  text-align: center;
+  border: none;
+  padding: 30px;
+  width: 35vw;
+  border-radius: 15px;
+  margin-bottom: 20px;
+  background-color: #4070f4;
+  color: white;
+}
+.item i {
+  font-size: 30px;
+}
+.item ul {
+  list-style-type: none;
+}
+.item ul li {
+  padding: 5px;
+}
+
+/* ==============================INCOME==================== */
+.income {
+  width: 100%;
+  background-color: rgb(243, 240, 240);
+}
+
+.incomeContent {
+  display: flex;
+  flex-direction: column;
+}
+.income .container {
+  /* width: 100vw; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem;
+  margin: 0.6rem;
+  background-color: white;
+}
+
+/* ---------------------Income details--------------------- */
+.income_content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.income-form form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10vh 0;
+}
+.income-form form label {
+  padding: 20px;
+}
+.form-list h4 {
+  padding-bottom: 10px;
+}
+.income-form form label input {
+  width: 75vw;
+  height: 2.5rem;
+  border-radius: 5px;
+  border: 1px solid gray;
+  padding: 10px;
+}
+.income-form form label select {
+  width: 75vw;
+  height: 2.5rem;
+  border-radius: 5px;
+  border: 1px solid gray;
+  padding: 10px;
+}
+.btn {
+  width: 200px;
+  height: 45px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4070f4;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  text-align: center;
+}
+/* ----------------------income history---------------------- */
+.income-history {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.income-history-content {
+  height: 100vh;
+}
+
+/* ---------------------------js style-------------------------- */
+.js-income-item {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 0;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.js-income-para {
+  background-color: #1bcfb4;
+  padding: 10px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  width: 90vw;
+}
+
+.js-income-para span {
+  color: white;
+  padding: 0 2px;
+}
+
+/* ---------------------------income chart---------------- */
+.income-chart {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.income-chart-content {
+  height: 100vh;
+}
+.income-chart-content p {
+  font-size: 12px;
+}
+
+/* ======================BUDGET===================== */
+.budget {
+  width: 100%;
+  background-color: rgb(243, 240, 240);
+}
+
+.budgetContent {
+  display: flex;
+  flex-direction: column;
+}
+.budget .container {
+  /* width: 100vw; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem;
+  margin: 0.6rem;
+  background-color: white;
+}
+/* ---------------------budget details----------------- */
+.Heading-budget {
+  width: 95vw;
+  display: flex;
+  justify-content: flex-start;
+  border-bottom: 2px solid black;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.budget_content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.budget-form form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10vh 0;
+}
+.budget-form form label {
+  padding: 20px;
+}
+.form-list h4 {
+  padding-bottom: 10px;
+}
+.budget-form form label input {
+  width: 50vw;
+  height: 2.5rem;
+  border-radius: 5px;
+  border: 1px solid gray;
+  padding: 10px;
+}
+.budget-form form label select {
+  width: 75vw;
+  height: 2.5rem;
+  border-radius: 5px;
+  border: 1px solid gray;
+  padding: 10px;
+}
+/* -------------budget list--------------- */
+.budgetList .container {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem;
+  margin: 0.6rem;
+  background-color: white;
+}
+.budget-list {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.bugdet-list-content {
+  height: 100vh;
+}
+
+/* --------------js style----------- */
+.js-budget-item {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 0;
+  justify-content: flex-start;
+  align-items: center;
+  width: 90vw;
+}
+.js-budget-item p {
+  /* text-align: start; */
+  font-size: 0.9rem;
+}
+
+/* --------------------budget-bars-------------- */
+.budget-bar-container {
+  margin-top: 10px;
+}
+
+.budget-bar {
+  width: 90vw;
+  height: 30px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.budget-fill {
+  height: 100%;
+  width: 0%;
+  transition: width 0.5s ease-in-out;
+}
+
+.budget-fill.over-budget {
+  background-color: #f44336; /* Red for over-budget */
+}
+
+.budget-percentage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+}
+/* ==============================Expense==================== */
+.expense {
+  width: 100%;
+  background-color: rgb(243, 240, 240);
+}
+
+.expenseContent {
+  display: flex;
+  flex-direction: column;
+}
+.expense .container {
+  /* width: 100vw; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem;
+  margin: 0.6rem;
+  background-color: white;
+}
+
+/* ---------------------expense details--------------------- */
+.expense_content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.expense-form form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10vh 0;
+}
+.expense-form form label {
+  padding: 20px;
+}
+.form-list h4 {
+  padding-bottom: 10px;
+}
+.expense-form form label input {
+  width: 75vw;
+  height: 2.5rem;
+  border-radius: 5px;
+  border: 1px solid gray;
+  padding: 10px;
+}
+.expense-form form label select {
+  width: 75vw;
+  height: 2.5rem;
+  border-radius: 5px;
+  border: 1px solid gray;
+  padding: 10px;
+}
+.btn {
+  width: 200px;
+  height: 45px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4070f4;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  text-align: center;
+}
+/* ----------------------expense history---------------------- */
+.expense-history {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.expense-history-content {
+  height: 100vh;
+}
+
+/* ----------js style------------------ */
+.js-expense-item {
+  display: flex;
+  flex-direction: row;
+  padding: 10px 0;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.js-expense-para {
+  background-color: #1bcfb4;
+  padding: 10px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  width: 90vw;
+}
+
+.js-expense-para span {
+  color: white;
+  padding: 0 2px;
+}
+
+/* ---------------------------expense chart---------------- */
+.expense-chart {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.expense-chart-content {
+  height: 100vh;
+}
+.expense-chart-content p {
+  font-size: 12px;
+}
+
+/* ==================footer==================== */
+
+footer {
+  width: 100%;
+  color: black;
+  text-align: center;
+  padding: 10px;
+  font-size: 20px;
+  font-family: "Raleway", serif;
+}
+footer span {
+  color: #4070f4;
+}
+
+/* =======================================responsive============================================= */
+
+@media only screen and (min-width: 1020px) {
+  .Heading {
+    width: 20vw;
+    margin: 2px 0;
+  }
+  .icon i {
+    font-size: 20px;
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+  .Heading h2 {
+    font-size: 22px;
+  }
+
+  /* -----------------main page------------- */
+  .heading {
+    background-image: url(https://savoney.netlify.app/assessts/bg169.svg);
+  }
+  .heading h1 {
+    font-size: 70px;
+    font-weight: bold;
+  }
+  /* ------------dashboard-------------- */
+  .dashboard_content {
+    display: flex;
+    gap: 2rem;
+    flex-direction: row;
+  }
+  .item {
+    font-size: 16px;
+    padding: 20px;
+    width: 20vw;
+  }
+  /* ------------------income---------------------- */
+  .incomeContent {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 5px;
+  }
+  .income .container {
+    width: 31vw;
+  }
+  /* ------income form------------------ */
+  .income-form form label input {
+    width: 25vw;
+  }
+  .income-form form label select {
+    width: 25vw;
+  }
+  .btn {
+    width: 150px;
+    height: 35px;
+    font-size: 15px;
+  }
+
+  /* -------------------------budget-------------------- */
+  .budget {
+    display: flex;
+    flex-direction: row;
+    /* width: 30vw; */
+    /* grid-template-columns: repeat(2, 1fr); */
+    gap: 1.5rem;
+    margin: 10px;
+  }
+  .budgetContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .budget .container {
+    width: 30vw;
+  }
+  .budgetList .container {
+    width: 65vw;
+  }
+  .budget-form form label input {
+    width: 25vw;
+  }
+  .budget-form form label select {
+    width: 25vw;
+  }
+  .btn {
+    width: 150px;
+    height: 35px;
+    font-size: 15px;
+  }
+  .Heading-budget {
+    width: 60vw;
+  }
+
+  .budget-bar {
+    width: 60vw;
+    height: 30px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 10px;
+  }
+  /* ------------------expense---------------------- */
+  .expenseContent {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin: 10px;
+  }
+  .expense .container {
+    width: 30vw;
+  }
+  /* ------income form------------------ */
+  .expense-form form label input {
+    width: 25vw;
+  }
+  .expense-form form label select {
+    width: 25vw;
+  }
+  .btn {
+    width: 150px;
+    height: 35px;
+    font-size: 15px;
+  }
+
+  /* ------------------------JS STYLE---------------------- */
+
+  /* ---------income-------------- */
+  .js-income-para {
+    width: 25vw;
+  }
+
+  /* ----------budget------------------- */
+  .js-budget-item {
+    width: 60vw;
+  }
+  .js-budget-item p {
+    /* text-align: start; */
+    font-size: 0.9rem;
+  }
+
+  /* -----------expense-------------------- */
+  .js-expense-para {
+    width: 25vw;
+  }
+}
+
+/* -----------------------animation---------------------------- */
+@keyframes animationBody {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-on-show {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.animate-on-show.visible {
+  animation: animationBody 0.5s ease-in-out forwards;
+}

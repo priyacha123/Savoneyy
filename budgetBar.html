@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Budget Tracker</title>
+  <style>
+    .budget-bar {
+      width: 100%;
+      height: 20px;
+      background-color: #f0f0f0;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .budget-fill {
+      height: 100%;
+      background-color: green;
+      transition: width 0.3s ease;
+    }
+
+    .over-budget {
+      background-color: red;
+    }
+
+    .budget-percentage {
+      display: block;
+      text-align: right;
+      font-size: 12px;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>Budget Tracker</h1>
+
+  <!-- Budget Input Section -->
+  <div>
+    <h2>Add Budget</h2>
+    <input type="text" id="budget-type" placeholder="Category (e.g., Food)">
+    <input type="number" id="budget-amount" placeholder="Amount">
+    <button id="budget-btn">Add Budget</button>
+  </div>
+
+  <!-- Expense Input Section -->
+  <div>
+    <h2>Add Expense</h2>
+    <select id="expense-source"></select>
+    <input type="number" id="expense-amount" placeholder="Expense Amount">
+    <button id="expense-btn">Add Expense</button>
+  </div>
+
+  <!-- Budget Bars -->
+  <div id="budget-bars"></div>
+
+  <script src="budget-tracker.js"></script>
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("budget-btn").addEventListener("click", addBudget);
+  document.getElementById("expense-btn").addEventListener("click", addExpense);
+  loadFromLocalStorage();
+});
+
+const budgets = {};
+const inputBudgetType = document.getElementById("budget-type");
+const inputBudgetAmount = document.getElementById("budget-amount");
+const expenseSource = document.getElementById("expense-source");
+const inputExpenseAmount = document.getElementById("expense-amount");
+const budgetBars = document.getElementById("budget-bars");
+
+// Add a new budget category
+function addBudget() {
+  const category = inputBudgetType.value.trim();
+  const budgetAmount = parseFloat(inputBudgetAmount.value);
+
+  if (!category || isNaN(budgetAmount) || budgetAmount <= 0) {
+    alert("Please enter a valid category and amount.");
+    return;
+  }
+
+  // Initialize or update the budget
+  if (!budgets[category]) {
+    budgets[category] = { budget: 0, expenses: 0 };
+  }
+
+  budgets[category].budget = budgetAmount;
+
+  // Update UI
+  addOption(category);
+  updateBudgetBar(category);
+  saveToLocalStorage();
+
+  // Clear inputs
+  inputBudgetType.value = "";
+  inputBudgetAmount.value = "";
+}
+
+// Add an expense to a category
+function addExpense() {
+  const category = expenseSource.value;
+  const expenseAmount = parseFloat(inputExpenseAmount.value);
+
+  if (!category || isNaN(expenseAmount) || expenseAmount <= 0) {
+    alert("Please select a category and enter a valid expense amount.");
+    return;
+  }
+
+  // Update expenses
+  if (!budgets[category]) {
+    alert(`No budget exists for ${category}. Please add a budget first.`);
+    return;
+  }
+
+  budgets[category].expenses += expenseAmount;
+
+  // Update UI
+  updateBudgetBar(category);
+  saveToLocalStorage();
+
+  // Clear input
+  inputExpenseAmount.value = "";
+}
+
+// Add a category to the dropdown if it doesn't already exist
+function addOption(category) {
+  const existingOption = [...expenseSource.options].find(
+    (opt) => opt.value === category
+  );
+
+  if (!existingOption && category.trim() !== "") {
+    const newOption = document.createElement("option");
+    newOption.value = category;
+    newOption.text = category;
+    expenseSource.appendChild(newOption);
+  }
+}
+
+// Update the budget bar for a specific category
+function updateBudgetBar(category) {
+  const categoryExpenses = parseFloat(budgets[category]?.expenses) || 0;
+  const categoryBudget = parseFloat(budgets[category]?.budget) || 1;
+  const percentageUsed = (categoryExpenses / categoryBudget) * 100;
+
+  let budgetBarContainer = document.getElementById(`budget-bar-${category}`);
+  if (!budgetBarContainer) {
+    budgetBarContainer = document.createElement("div");
+    budgetBarContainer.id = `budget-bar-${category}`;
+    budgetBarContainer.innerHTML = `
+      <strong>${category}</strong>
+      <div class="budget-bar">
+        <div class="budget-fill">
+          <span class="budget-percentage">${Math.min(
+            percentageUsed.toFixed(2),
+            100
+          )}%</span>
+        </div>
+      </div>
+    `;
+    budgetBars.appendChild(budgetBarContainer);
+  }
+
+  const budgetFill = budgetBarContainer.querySelector(".budget-fill");
+  budgetFill.style.width = `${Math.min(percentageUsed, 100)}%`;
+  budgetFill.querySelector(".budget-percentage").textContent = `${Math.min(
+    percentageUsed.toFixed(2),
+    100
+  )}%`;
+
+  // Change color if over budget
+  if (percentageUsed > 100) {
+    budgetFill.classList.add("over-budget");
+  } else {
+    budgetFill.classList.remove("over-budget");
+  }
+}
+
+// // Save data to local storage
+// function saveToLocalStorage() {
+//   localStorage.setItem("budgets", JSON.stringify(budgets));
+// }
+
+// // Load data from local storage
+// function loadFromLocalStorage() {
+//   const savedBudgets = localStorage.getItem("budgets");
+//   if (savedBudgets) {
+//     Object.assign(budgets, JSON.parse(savedBudgets));
+//   }
+
+//   // Rebuild budget bars and options
+//   for (const category in budgets) {
+//     addOption(category);
+//     updateBudgetBar(category);
+//   }
+// }
+</script>
+
+</html>

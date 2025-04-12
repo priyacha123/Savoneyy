@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Select Option</title>
+</head>
+<body>
+  <form action="/submit" method="post">
+    <!-- Text Input -->
+    <label for="newOption">Enter a new option:</label>
+    <input type="text" id="newOption" placeholder="Type something...">
+    
+    <!-- Button to Add Option -->
+    <button type="button" onclick="addOption()">Add to Dropdown</button>
+  </form>
+
+    <form action="/submit" method="post">
+    <!-- Select Dropdown -->
+    <label for="optionsList">Select an option:</label>
+    <select name="optionsList" id="optionsList">
+      <option value="default">Default Option</option>
+    </select>
+
+    <!-- Submit Button -->
+    <input type="submit" value="Submit">
+  </form>
+
+  <script>
+    function addOption() {
+      // Get the value from the text input
+      const newOptionValue = document.getElementById('newOption').value;
+
+      // Check if the input is not empty
+      if (newOptionValue.trim() !== "") {
+        // Create a new <option> element
+        const newOption = document.createElement('option');
+        newOption.value = newOptionValue;
+        newOption.text = newOptionValue;
+
+        // Append the new option to the select dropdown
+        const selectDropdown = document.getElementById('optionsList');
+        selectDropdown.appendChild(newOption);
+
+        // Clear the text input after adding the option
+        document.getElementById('newOption').value = '';
+      } else {
+        alert("Please enter a valid option!");
+      }
+    }
+  </script>
+</body>
+</html>
