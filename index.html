@@ -1,18 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Savoney | Expense Tracker</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
-    <link rel="stylesheet" href="style3.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <title>Savoney | Expense Tracker</title>
+
+  <!-- Boxicons -->
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+  <!-- AOS -->
+  <link rel="stylesheet"
+    href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/src/css/style3.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
     <!-- -------------header---------------- -->
     <header>
@@ -62,13 +69,13 @@
         <div class="dashboard_box">
             <div class="container">
                 <div class="Heading-dash icon">
-                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <i class='bx bx-tachometer'></i>
                     <h2>Dashboard</h2>
                 </div>
                 <div class="dashboard_content">
                     <div class="item">
                         <ul>
-                            <li><i class="uil uil-thumbs-up"></i></li>
+                            <li><i class='bx bx-thumbs-up'></i></li>
                             <li>
                                 <h3>Total Balance</h3>
                             </li>
@@ -79,7 +86,7 @@
                     </div>
                     <div class="item">
                         <ul>
-                            <li><i class="uil uil-comments"></i></li>
+                            <li><i class='bx bx-comments'></i></li>
                             <li>
                                 <h3>Total Income</h3>
                             </li>
@@ -90,7 +97,7 @@
                     </div>
                     <div class="item">
                         <ul>
-                            <li><i class="uil uil-share"></i></li>
+                            <li><i class='bx bx-share'></i></li>
                             <li>
                                 <h3>Total Expense</h3>
                             </li>
@@ -110,7 +117,7 @@
         <div class="incomeContent animate-on-show">
             <div class="container">
                 <div class="Heading icon">
-                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <i class='bx bx-tachometer'></i>
                     <h2>Income Details</h2>
                 </div>
                 <div class="income_content">
@@ -153,7 +160,7 @@
 
                     ">
                         Add
-                        <i class="uil uil-navigator"></i>
+                        <i class='bx bx-navigator'></i>
                     </button>
                 </div>
             </div>
@@ -164,7 +171,7 @@
 
             <div class="container animate-on-show">
                 <div class="Heading icon">
-                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <i class='bx bx-tachometer'></i>
                     <h2>Income History</h2>
                 </div>
                 <div class="income-history-content">
@@ -178,7 +185,7 @@
 
             <div class="container animate-on-show">
                 <div class="Heading icon">
-                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <i class='bx bx-tachometer'></i>
                     <h2>Income Chart</h2>
                 </div>
                 <div class="income-chart-content">
@@ -195,7 +202,7 @@
         <div class="budgetContent animate-on-show">
             <div class="container">
                 <div class="Heading icon">
-                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <i class='bx bx-tachometer'></i>
                     <h2>Budget Details</h2>
                 </div>
                 <div class="budget_content">
@@ -217,7 +224,7 @@
                     </div>
                     <button class="btn" id="budget-btn">
                         Next
-                        <i class="uil uil-navigator"></i>
+                        <i class='bx bx-navigator'></i>
                     </button>
                 </div>
             </div>
@@ -228,7 +235,7 @@
         <div class="budgetList animate-on-show">
             <div class="container">
                 <div class="Heading Heading-budget icon">
-                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <i class='bx bx-tachometer'></i>
                     <h2>Budget List</h2>
                 </div>
                 <div class="budget-list-content">
@@ -250,7 +257,7 @@
         <div class="expenseContent animate-on-show">
             <div class="container">
                 <div class="Heading icon">
-                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <i class='bx bx-tachometer'></i>
                     <h2>Expense Details</h2>
                 </div>
                 <div class="expense_content">
@@ -290,7 +297,7 @@
                     addExpense();
                     ">
                         Next
-                        <i class="uil uil-navigator"></i>
+                        <i class='bx bx-navigator'></i>
                     </button>
                 </div>
             </div>
@@ -301,7 +308,7 @@
 
             <div class="container animate-on-show">
                 <div class="Heading icon">
-                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <i class='bx bx-tachometer'></i>
                     <h2>Expense History</h2>
                 </div>
                 <div class="expense-history-content">
@@ -315,7 +322,7 @@
 
             <div class="container animate-on-show">
                 <div class="Heading icon">
-                    <i class="uil uil-tachometer-fast-alt"></i>
+                    <i class='bx bx-tachometer'></i>
                     <h2>Expense Chart</h2>
                 </div>
                 <div class="expense-chart-content">
@@ -325,17 +332,15 @@
             
             
         </div>
-    </section>
+    </section> 
 
     <!-- ===============footer=================== -->
     <footer>
         made with ❤️ by <span>Priya</span>
     </footer>
 
-    <script src="script2.js"></script>
+</body>
+<script type="module" src="/src/main.js"></script>
 
 </body>
-
-
-
 </html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Budget Tracker</title>
+
+  <link rel="stylesheet" href="/src/css/budgetBar.css">
+</head>
+
+<body>
+
+<h1>Budget Tracker</h1>
+
+<div>
+  <h2>Add Budget</h2>
+
+  <input type="text" id="budget-type" placeholder="Category (e.g., Food)">
+
+  <input type="number" id="budget-amount" placeholder="Amount">
+
+  <button id="budget-btn">Add Budget</button>
+</div>
+
+<div>
+  <h2>Add Expense</h2>
+
+  <select id="expense-source"></select>
+
+  <input type="number" id="expense-amount" placeholder="Expense Amount">
+
+  <button id="expense-btn">Add Expense</button>
+</div>
+
+<div id="budget-bars"></div>
+
+<script type="module" src="/src/js/budgetBar.js"></script>
+
+</body>
+</html>

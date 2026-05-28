@@ -1,64 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Budget Tracker</title>
-  <style>
-    .budget-bar {
-      width: 100%;
-      height: 20px;
-      background-color: #f0f0f0;
-      border-radius: 5px;
-      overflow: hidden;
-      margin-top: 5px;
-    }
-
-    .budget-fill {
-      height: 100%;
-      background-color: green;
-      transition: width 0.3s ease;
-    }
-
-    .over-budget {
-      background-color: red;
-    }
-
-    .budget-percentage {
-      display: block;
-      text-align: right;
-      font-size: 12px;
-      color: white;
-    }
-  </style>
-</head>
-<body>
-  <h1>Budget Tracker</h1>
-
-  <!-- Budget Input Section -->
-  <div>
-    <h2>Add Budget</h2>
-    <input type="text" id="budget-type" placeholder="Category (e.g., Food)">
-    <input type="number" id="budget-amount" placeholder="Amount">
-    <button id="budget-btn">Add Budget</button>
-  </div>
-
-  <!-- Expense Input Section -->
-  <div>
-    <h2>Add Expense</h2>
-    <select id="expense-source"></select>
-    <input type="number" id="expense-amount" placeholder="Expense Amount">
-    <button id="expense-btn">Add Expense</button>
-  </div>
-
-  <!-- Budget Bars -->
-  <div id="budget-bars"></div>
-
-  <script src="budget-tracker.js"></script>
-</body>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
+export function initBudgetBar() {
+     document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("budget-btn").addEventListener("click", addBudget);
   document.getElementById("expense-btn").addEventListener("click", addExpense);
   loadFromLocalStorage();
@@ -158,7 +99,7 @@ function updateBudgetBar(category) {
           )}%</span>
         </div>
       </div>
-    `;
+    `; 
     budgetBars.appendChild(budgetBarContainer);
   }
 
@@ -195,6 +136,4 @@ function updateBudgetBar(category) {
 //     updateBudgetBar(category);
 //   }
 // }
-</script>
-
-</html>
+}

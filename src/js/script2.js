@@ -1,23 +1,34 @@
 // ==============sidebar======================
 const sideBar = document.getElementById("sidebar");
 
+// Close sidebar when clicking menu items
 document.querySelectorAll(".listItem").forEach((item) => {
-  item.addEventListener('click', () => {
-    sideBar.style.left = "-100%";
+  item.addEventListener("click", () => {
+    if (sideBar) {
+      sideBar.style.left = "-100%";
+    }
   });
-})
-
-
-document.querySelector(".bx-menu").addEventListener('click', () => {
-  if (sideBar.style.left === "-100%") {
-    sideBar.style.left = 0;
-  } else {
-    sideBar.style.left = "-100%";
-  }
 });
 
-document.getElementById("reset").addEventListener('click', resetData)
-  
+// Open / Close sidebar
+const menuBtn = document.querySelector(".bx-menu");
+
+if (menuBtn && sideBar) {
+  menuBtn.addEventListener("click", () => {
+    if (sideBar.style.left === "-100%") {
+      sideBar.style.left = "0";
+    } else {
+      sideBar.style.left = "-100%";
+    }
+  });
+}
+
+const resetBtn = document.getElementById("reset");
+
+if (resetBtn) {
+  resetBtn.addEventListener("click", resetData);
+}
+
   function resetData(){
   // --------------------------dashboard------------------------
   totalBalance.textContent = 0;
