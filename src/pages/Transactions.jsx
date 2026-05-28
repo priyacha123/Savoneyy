@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "./../css/budgetBar.css";
 
 const BudgetTracker = () => {
   const [budgets, setBudgets] = useState({});
@@ -64,102 +63,138 @@ const BudgetTracker = () => {
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "auto" }}>
-      <h1>Budget Tracker</h1>
+    <div className="min-h-screen bg-gray-100 flex justify-center items-start p-6">
+      <div className="w-full max-w-2xl bg-white shadow-xl rounded-2xl p-6">
+        
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">
+          Budget Tracker
+        </h1>
 
-      {/* Add Budget Section */}
-      <div>
-        <h2>Add Budget</h2>
+        {/* Add Budget Section */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-4 text-gray-700">
+            Add Budget
+          </h2>
 
-        <input
-          type="text"
-          placeholder="Category (e.g., Food)"
-          value={budgetType}
-          onChange={(e) => setBudgetType(e.target.value)}
-        />
+          <div className="flex flex-col md:flex-row gap-4">
+            <input
+              type="text"
+              placeholder="Category (e.g., Food)"
+              value={budgetType}
+              onChange={(e) => setBudgetType(e.target.value)}
+              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
 
-        <input
-          type="number"
-          placeholder="Amount"
-          value={budgetAmount}
-          onChange={(e) => setBudgetAmount(e.target.value)}
-        />
+            <input
+              type="number"
+              placeholder="Amount"
+              value={budgetAmount}
+              onChange={(e) => setBudgetAmount(e.target.value)}
+              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
 
-        <button onClick={addBudget}>Add Budget</button>
-      </div>
+            <button
+              onClick={addBudget}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition duration-300"
+            >
+              Add Budget
+            </button>
+          </div>
+        </div>
 
-      {/* Add Expense Section */}
-      <div style={{ marginTop: "20px" }}>
-        <h2>Add Expense</h2>
+        {/* Add Expense Section */}
+        <div className="mb-10">
+          <h2 className="text-xl font-semibold mb-4 text-gray-700">
+            Add Expense
+          </h2>
 
-        <select
-          value={expenseSource}
-          onChange={(e) => setExpenseSource(e.target.value)}
-        >
-          <option value="">Select Category</option>
+          <div className="flex flex-col md:flex-row gap-4">
+            <select
+              value={expenseSource}
+              onChange={(e) => setExpenseSource(e.target.value)}
+              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+            >
+              <option value="">Select Category</option>
 
-          {Object.keys(budgets).map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
+              {Object.keys(budgets).map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
 
-        <input
-          type="number"
-          placeholder="Expense Amount"
-          value={expenseAmount}
-          onChange={(e) => setExpenseAmount(e.target.value)}
-        />
+            <input
+              type="number"
+              placeholder="Expense Amount"
+              value={expenseAmount}
+              onChange={(e) => setExpenseAmount(e.target.value)}
+              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400"
+            />
 
-        <button onClick={addExpense}>Add Expense</button>
-      </div>
+            <button
+              onClick={addExpense}
+              className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg transition duration-300"
+            >
+              Add Expense
+            </button>
+          </div>
+        </div>
 
-      {/* Budget Bars */}
-      <div style={{ marginTop: "30px" }}>
-        {Object.keys(budgets).map((category) => {
-          const categoryBudget = budgets[category].budget;
-          const categoryExpenses = budgets[category].expenses;
+        {/* Budget Bars */}
+        <div className="space-y-6">
+          {Object.keys(budgets).map((category) => {
+            const categoryBudget = budgets[category].budget;
+            const categoryExpenses = budgets[category].expenses;
 
-          const percentageUsed =
-            (categoryExpenses / categoryBudget) * 100;
+            const percentageUsed =
+              (categoryExpenses / categoryBudget) * 100;
 
-          return (
-            <div key={category} style={{ marginBottom: "20px" }}>
-              <strong>{category}</strong>
-
+            return (
               <div
-                style={{
-                  width: "100%",
-                  height: "20px",
-                  backgroundColor: "#f0f0f0",
-                  borderRadius: "5px",
-                  overflow: "hidden",
-                  marginTop: "5px",
-                }}
+                key={category}
+                className="bg-gray-50 border border-gray-200 rounded-xl p-4 shadow-sm"
               >
-                <div
-                  style={{
-                    width: `${Math.min(percentageUsed, 100)}%`,
-                    height: "100%",
-                    backgroundColor:
-                      percentageUsed > 100 ? "red" : "green",
-                    transition: "width 0.3s ease",
-                    textAlign: "right",
-                    color: "white",
-                    fontSize: "12px",
-                  }}
-                >
-                  {Math.min(percentageUsed, 100).toFixed(2)}%
-                </div>
-              </div>
+                <div className="flex justify-between items-center mb-2">
+                  <strong className="text-gray-700 text-lg">
+                    {category}
+                  </strong>
 
-              <p>
-                Budget: ₹{categoryBudget} | Expenses: ₹{categoryExpenses}
-              </p>
-            </div>
-          );
-        })}
+                  <span className="text-sm text-gray-500">
+                    ₹{categoryExpenses} / ₹{categoryBudget}
+                  </span>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="w-full h-5 bg-gray-200 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full text-xs text-white flex items-center justify-end pr-2 transition-all duration-300 ${
+                      percentageUsed > 100
+                        ? "bg-red-500"
+                        : "bg-green-500"
+                    }`}
+                    style={{
+                      width: `${Math.min(
+                        percentageUsed,
+                        100
+                      )}%`,
+                    }}
+                  >
+                    {Math.min(
+                      percentageUsed,
+                      100
+                    ).toFixed(2)}
+                    %
+                  </div>
+                </div>
+
+                <p className="mt-2 text-sm text-gray-600">
+                  Budget: ₹{categoryBudget} | Expenses:
+                  ₹{categoryExpenses}
+                </p>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

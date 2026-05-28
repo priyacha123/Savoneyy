@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import "./../css/animation.css";
+import "../css/animation.css"
 
 const ScrollAnimation = () => {
   const sectionsRef = useRef([]);
@@ -11,10 +11,16 @@ const ScrollAnimation = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            // Add visible class when element is in view
-            entry.target.classList.add("visible");
+            entry.target.classList.remove(
+              "opacity-0",
+              "translate-y-10"
+            );
 
-            // Stop observing after animation
+            entry.target.classList.add(
+              "opacity-100",
+              "translate-y-0"
+            );
+
             observer.unobserve(entry.target);
           }
         });
@@ -39,15 +45,18 @@ const ScrollAnimation = () => {
     {
       id: "dashboard",
       title: "Dashboard",
-      content: <p>Total Balance: $0</p>,
+      content: <p className="text-gray-600">Total Balance: $0</p>,
     },
     {
       id: "income",
       title: "Income Details",
       content: (
         <form>
-          {/* Form fields */}
-          <input type="text" placeholder="Enter income source" />
+          <input
+            type="text"
+            placeholder="Enter income source"
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
         </form>
       ),
     },
@@ -56,8 +65,9 @@ const ScrollAnimation = () => {
       title: "Budget Details",
       content: (
         <div>
-          {/* Budget content */}
-          <p>Budget information goes here.</p>
+          <p className="text-gray-600">
+            Budget information goes here.
+          </p>
         </div>
       ),
     },
@@ -66,58 +76,39 @@ const ScrollAnimation = () => {
       title: "Expense Details",
       content: (
         <div>
-          {/* Expense content */}
-          <p>Expense information goes here.</p>
+          <p className="text-gray-600">
+            Expense information goes here.
+          </p>
         </div>
       ),
     },
   ];
 
   return (
-    <div>
-      {/* Internal CSS */}
-      <style>{`
-        /* Animation */
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        /* Initial hidden state */
-        .animate-on-show {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-
-        /* Visible animation */
-        .animate-on-show.visible {
-          animation: fadeIn 1s ease-in-out forwards;
-        }
-
-        section {
-          padding: 20px;
-          margin: 20px 0;
-          border: 1px solid #ddd;
-          border-radius: 10px;
-        }
-      `}</style>
-
-      {/* Sections */}
+    <div className="min-h-screen bg-gray-100 p-6 space-y-10">
       {sections.map((section, index) => (
         <section
           key={section.id}
           id={section.id}
-          className="animate-on-show"
           ref={(el) => (sectionsRef.current[index] = el)}
+          className="
+            opacity-0
+            translate-y-10
+            transition-all
+            duration-1000
+            ease-in-out
+            bg-white
+            shadow-lg
+            rounded-2xl
+            p-6
+            max-w-3xl
+            mx-auto
+          "
         >
-          <h2>{section.title}</h2>
+          <h2 className="text-2xl font-bold mb-4 text-gray-800">
+            {section.title}
+          </h2>
+
           {section.content}
         </section>
       ))}
