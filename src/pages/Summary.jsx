@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import "../css/animation.css"
+import "../css/animation.css";
 
 const ScrollAnimation = () => {
   const sectionsRef = useRef([]);
@@ -11,16 +11,11 @@ const ScrollAnimation = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.remove(
-              "opacity-0",
-              "translate-y-10"
-            );
 
-            entry.target.classList.add(
-              "opacity-100",
-              "translate-y-0"
-            );
+            // Add visible class
+            entry.target.classList.add("visible");
 
+            // Stop observing after animation
             observer.unobserve(entry.target);
           }
         });
@@ -55,7 +50,18 @@ const ScrollAnimation = () => {
           <input
             type="text"
             placeholder="Enter income source"
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="
+              w-full
+              border
+              border-gray-300
+              rounded-lg
+              px-4
+              py-2
+              mt-2
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-400
+            "
           />
         </form>
       ),
@@ -92,11 +98,7 @@ const ScrollAnimation = () => {
           id={section.id}
           ref={(el) => (sectionsRef.current[index] = el)}
           className="
-            opacity-0
-            translate-y-10
-            transition-all
-            duration-1000
-            ease-in-out
+            animate-on-show
             bg-white
             shadow-lg
             rounded-2xl
