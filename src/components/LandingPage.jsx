@@ -781,6 +781,17 @@ export default function SavoneyLanding() {
   </SignInButton>
 </SignedOut>
 
+<SignedIn>
+  <button
+    onClick={() => navigate("/dashboard")}
+    style={{
+      ...S.btnGetStarted,
+    }}
+  >
+    Dashboard
+  </button>
+</SignedIn>
+
             {/* Trust chips */}
             <div style={{ display: "flex", gap: 20, marginTop: 36, alignItems: "center" }}>
               {["Free forever", "No credit card", "256-bit encryption"].map((t) => (

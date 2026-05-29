@@ -32,23 +32,11 @@ function App() {
     });
 
   }, [user]);
-  
+
   return (
     <>
-      {/* <header>
-        <SignedOut>
-          <SignInButton />
-          <SignUpButton />
-        </SignedOut>
-
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </header> */}
-
       <Routes>
         <Route path="/" element={<LandingPage />} />
-
         <Route
           path="/dashboard"
           element={
