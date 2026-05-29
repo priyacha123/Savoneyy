@@ -17,7 +17,7 @@ import LandingPage from "./components/LandingPage";
 function App() {
   return (
     <>
-      <header>
+      {/* <header>
         <SignedOut>
           <SignInButton />
           <SignUpButton />
@@ -26,7 +26,7 @@ function App() {
         <SignedIn>
           <UserButton />
         </SignedIn>
-      </header>
+      </header> */}
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
