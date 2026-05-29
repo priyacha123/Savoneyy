@@ -1,264 +1,146 @@
-import { Link } from 'react-router-dom';
-import '../css/landingPage.css';
+import React from 'react';
+import { 
+  Wallet, 
+  TrendingUp, 
+  ShieldCheck, 
+  ArrowRight, 
+  Compass,
+  Globe,          // Replaces Facebook
+  MessageSquare,  // Replaces Instagram
+  Video           // Replaces Youtube
+} from 'lucide-react';
 
-const navItems = ['Features', 'How it Works', 'Analytics', 'Testimonials'];
-
-const metrics = [
-  { label: 'Users onboarded', value: '120K+' },
-  { label: 'Transactions tracked', value: '$48M' },
-  { label: 'Growth this quarter', value: '+32%' },
-];
-
-const features = [
-  {
-    title: 'Smart income tracking',
-    description:
-      'Organize every stream in one calm dashboard with smooth filters, quick tagging, and instant visibility.',
-  },
-  {
-    title: 'Budget planning that feels easy',
-    description:
-      'Turn complex monthly planning into a clean workflow with guided cards, totals, and progress indicators.',
-  },
-  {
-    title: 'Insightful visual analytics',
-    description:
-      'Read trends fast with polished charts, category breakdowns, and elegant summaries inspired by the reference UI.',
-  },
-];
-
-const testimonials = [
-  {
-    quote:
-      'The interface feels premium and simple at the same time. Our customers instantly understand the product.',
-    name: 'Ava Morgan',
-    role: 'Product Lead, Northstar Labs',
-  },
-  {
-    quote:
-      'We launched faster because the landing page already tells the product story with clarity and trust.',
-    name: 'Daniel Cruz',
-    role: 'Founder, Ledger Bloom',
-  },
-];
-
-export default function LandingPage() {
+export default function SavoneyMinimalLanding() {
   return (
-    <div className="lp-shell">
-      <div className="lp-bg-orb lp-bg-orb-one" />
-      <div className="lp-bg-orb lp-bg-orb-two" />
-
-      <header className="lp-navbar">
-        <div className="lp-brand">
-          <div className="lp-brand-mark">S</div>
-          <div>
-            <p className="lp-brand-title">Savoney</p>
-            <p className="lp-brand-subtitle">Finance made graceful</p>
-          </div>
+    <div className="min-h-screen bg-[#f0f6fa] text-slate-700 font-sans antialiased flex flex-col justify-between selection:bg-sky-200 selection:text-sky-900">
+      
+      {/* 1. Minimal Header / Navbar */}
+      <header className="max-w-6xl mx-auto w-full px-6 h-20 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-sky-600">
+          <Wallet className="w-6 h-6 stroke-[2.5]" />
+          <span className="text-xl font-bold tracking-tight text-slate-800">Savoney</span>
         </div>
+        
+        <div className="flex items-center gap-8">
+          <nav className="hidden sm:flex items-center gap-6 text-sm font-medium text-slate-500">
+            <a href="#features" className="hover:text-sky-600 transition-colors">Features</a>
+            <a href="#pricing" className="hover:text-sky-600 transition-colors">Pricing</a>
+          </nav>
 
-        <nav className="lp-nav-links">
-          {navItems.map((item) => (
-            <a href={`#${item.toLowerCase().replace(/\s+/g, '-')}`} key={item}>
-              {item}
-            </a>
-          ))}
-        </nav>
-
-        <div className="lp-nav-actions">
-          <button className="lp-btn lp-btn-ghost">Sign in</button>
-          <button className="lp-btn lp-btn-primary">Start free</button>
+          <div className="flex items-center gap-3">
+            <button className="text-sm font-semibold text-slate-600 hover:text-slate-900 px-3 py-2 transition-colors">
+              Log In
+            </button>
+            <button className="bg-sky-500 hover:bg-sky-600 text-white font-medium px-4 py-2 rounded-xl text-sm transition-all shadow-sm shadow-sky-500/10">
+              Get Started
+            </button>
+          </div>
         </div>
       </header>
 
-      <main>
-        <section className="lp-hero">
-          <div className="lp-hero-copy">
-            <span className="lp-badge">Modern Fintech Landing Page</span>
-            <h1>
-              Build financial clarity with a landing page inspired by a sleek dashboard UI.
-            </h1>
-            <p>
-              This React JSX layout borrows the clean blue palette, rounded cards, soft shadows,
-              and data-first storytelling style seen in your reference video—reimagined as a
-              conversion-focused landing page.
-            </p>
+      {/* 2. Main Hero Grid */}
+      <main className="max-w-6xl mx-auto w-full px-6 flex-1 grid grid-cols-1 md:grid-cols-12 gap-12 items-center pt-8 pb-16">
+        
+        {/* Left Column: Copy & Form Action */}
+        <div className="md:col-span-7 space-y-6 text-left">
+          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-slate-800 leading-[1.15]">
+            Savoney: Your Simple <br />
+            <span className="text-sky-500">Financial Partner</span>
+          </h1>
+          
+          <p className="text-base sm:text-lg text-slate-500 max-w-md leading-relaxed">
+            Achieve financial clarity effortlessly. Track, budget, and grow your wealth with minimal steps.
+          </p>
 
-            <div className="lp-hero-actions">
-              <Link to="/dashboard" className="lp-btn lp-btn-primary lp-btn-large">
-                Get started
-              </Link>
-              <Link to="/login" className="lp-btn lp-btn-secondary lp-btn-large">
-                Watch demo
-              </Link>
+          <div className="pt-2">
+            <button className="group bg-sky-500 hover:bg-sky-600 text-white font-semibold px-6 py-3.5 rounded-xl transition-all shadow-md shadow-sky-500/10 flex items-center gap-2 text-sm">
+              Create Account
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+            </button>
+          </div>
+        </div>
+
+        {/* Right Column: Clean Vector Minimal Art Frame */}
+        <div className="md:col-span-5 flex justify-center md:justify-end">
+          <div className="relative w-full max-w-[360px] aspect-[4/3] bg-white border border-slate-200/60 rounded-2xl shadow-sm p-6 flex flex-col justify-between">
+            <div className="flex justify-between items-start">
+              <div className="p-3 bg-sky-50 rounded-xl border border-sky-100 text-sky-500">
+                <Wallet className="w-8 h-8 stroke-[1.5]" />
+              </div>
+              <div className="text-right">
+                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Balance</span>
+                <p className="text-2xl font-bold text-slate-800">$4,350</p>
+              </div>
             </div>
 
-            <div className="lp-metrics">
-              {metrics.map((metric) => (
-                <div className="lp-metric-card" key={metric.label}>
-                  <h3>{metric.value}</h3>
-                  <p>{metric.label}</p>
-                </div>
-              ))}
+            {/* Simulating the minimal vector line chart */}
+            <div className="h-16 flex items-end justify-between gap-1 mt-4 px-2">
+              <div className="w-full bg-sky-100 rounded-t-md h-[40%] transition-all hover:bg-sky-200" />
+              <div className="w-full bg-sky-100 rounded-t-md h-[65%] transition-all hover:bg-sky-200" />
+              <div className="w-full bg-sky-200 rounded-t-md h-[50%] transition-all hover:bg-sky-300" />
+              <div className="w-full bg-sky-500 rounded-t-md h-[90%] shadow-sm" />
             </div>
           </div>
-
-          <div className="lp-dashboard-preview">
-            <div className="lp-preview-topbar">
-              <div className="lp-preview-chip active">Income</div>
-              <div className="lp-preview-chip">Budget</div>
-              <div className="lp-preview-chip">Expenses</div>
-            </div>
-
-            <div className="lp-preview-grid">
-              <article className="lp-card lp-card-form">
-                <div className="lp-card-header">
-                  <span className="lp-card-dot" />
-                  <h4>Income Details</h4>
-                </div>
-                <div className="lp-form-mock">
-                  <div className="lp-input-mock" />
-                  <div className="lp-input-mock" />
-                  <div className="lp-input-row">
-                    <div className="lp-input-mock small" />
-                    <div className="lp-input-mock small" />
-                  </div>
-                  <div className="lp-submit-mock">Next</div>
-                </div>
-              </article>
-
-              <article className="lp-card lp-card-history">
-                <div className="lp-card-header">
-                  <span className="lp-card-dot" />
-                  <h4>Recent History</h4>
-                </div>
-                {[1, 2, 3, 4].map((row) => (
-                  <div className="lp-history-row" key={row}>
-                    <div>
-                      <strong>Salary Source {row}</strong>
-                      <p>Updated just now</p>
-                    </div>
-                    <span>+$2,400</span>
-                  </div>
-                ))}
-              </article>
-
-              <article className="lp-card lp-card-chart">
-                <div className="lp-card-header">
-                  <span className="lp-card-dot" />
-                  <h4>Expense Chart</h4>
-                </div>
-                <div className="lp-chart-mock">
-                  <div className="lp-bar bar-a" />
-                  <div className="lp-bar bar-b" />
-                  <div className="lp-bar bar-c" />
-                  <div className="lp-bar bar-d" />
-                  <div className="lp-bar bar-e" />
-                </div>
-                <div className="lp-chart-footer">
-                  <div>
-                    <strong>84%</strong>
-                    <p>Budget efficiency</p>
-                  </div>
-                  <div>
-                    <strong>$12.8K</strong>
-                    <p>Tracked this month</p>
-                  </div>
-                </div>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        <section className="lp-section" id="features">
-          <div className="lp-section-heading">
-            <span className="lp-badge muted">Why teams love it</span>
-            <h2>Designed with the same calm, polished structure as the reference UI.</h2>
-            <p>
-              Rounded surfaces, layered shadows, soft gradients, and consistent spacing create a
-              premium financial product feel without overwhelming the user.
-            </p>
-          </div>
-
-          <div className="lp-feature-grid">
-            {features.map((feature, index) => (
-              <article className="lp-feature-card" key={feature.title}>
-                <div className="lp-feature-icon">0{index + 1}</div>
-                <h3>{feature.title}</h3>
-                <p>{feature.description}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="lp-section lp-highlight" id="analytics">
-          <div className="lp-highlight-copy">
-            <span className="lp-badge muted">Dashboard-inspired storytelling</span>
-            <h2>Show product value before users even sign up.</h2>
-            <p>
-              The hero preview mirrors the reference video’s card-driven interface, while this
-              section extends it with trust signals, clean messaging, and high-conversion layout.
-            </p>
-            <ul className="lp-check-list">
-              <li>Sticky glass-style navigation bar</li>
-              <li>Blue gradient CTAs with elegant hover states</li>
-              <li>Responsive card layout for product snapshots</li>
-              <li>Testimonial blocks for social proof</li>
-            </ul>
-          </div>
-
-          <div className="lp-highlight-panel">
-            <div className="lp-highlight-line" />
-            <div className="lp-highlight-line short" />
-            <div className="lp-highlight-stat">
-              <span>Revenue pulse</span>
-              <strong>+18.4%</strong>
-            </div>
-            <div className="lp-highlight-stat">
-              <span>User confidence</span>
-              <strong>4.9/5</strong>
-            </div>
-            <div className="lp-highlight-stat">
-              <span>Operational clarity</span>
-              <strong>All-in-one</strong>
-            </div>
-          </div>
-        </section>
-
-        <section className="lp-section" id="testimonials">
-          <div className="lp-section-heading narrow">
-            <span className="lp-badge muted">Testimonials</span>
-            <h2>Simple words from teams that wanted a sharper first impression.</h2>
-          </div>
-
-          <div className="lp-testimonial-grid">
-            {testimonials.map((item) => (
-              <article className="lp-testimonial-card" key={item.name}>
-                <p>“{item.quote}”</p>
-                <div>
-                  <strong>{item.name}</strong>
-                  <span>{item.role}</span>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="lp-section lp-cta" id="how-it-works">
-          <div>
-            <span className="lp-badge">Launch-ready JSX</span>
-            <h2>Drop this into your React project and customize the content in minutes.</h2>
-            <p>
-              The structure is already organized for a navbar, hero, features, analytics preview,
-              testimonials, and a final conversion-focused CTA.
-            </p>
-          </div>
-          <div className="lp-cta-actions">
-            <button className="lp-btn lp-btn-primary lp-btn-large">Use this layout</button>
-            <button className="lp-btn lp-btn-secondary lp-btn-large">Customize sections</button>
-          </div>
-        </section>
+        </div>
       </main>
+
+      {/* 3. Core Features Minimal Row */}
+      <section id="features" className="max-w-6xl mx-auto w-full px-6 py-8 border-t border-slate-200/50">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+          
+          <div className="flex gap-4 items-start">
+            <div className="p-2 rounded-lg bg-sky-50 text-sky-500 mt-0.5 border border-sky-100">
+              <Compass className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-slate-800">Smart Budgeting</h3>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                Categorize transfers and expenses automatically without thinking.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-4 items-start">
+            <div className="p-2 rounded-lg bg-sky-50 text-sky-500 mt-0.5 border border-sky-100">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-slate-800">Secure Account</h3>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                Bank-grade isolation guarantees your transaction logs remain your eyes only.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex gap-4 items-start">
+            <div className="p-2 rounded-lg bg-sky-50 text-sky-500 mt-0.5 border border-sky-100">
+              <TrendingUp className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-slate-800">Fast Transactions</h3>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                Add, search, filter, or edit records instantly on a single smooth view.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+     {/* 4. Minimal Footer */}
+<footer className="max-w-6xl mx-auto w-full px-6 py-6 border-t border-slate-200/40 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-slate-400">
+  <div className="flex gap-6">
+    <a href="#about" className="hover:text-slate-600 transition-colors">About</a>
+    <a href="#terms" className="hover:text-slate-600 transition-colors">Terms of Service</a>
+    <a href="#privacy" className="hover:text-slate-600 transition-colors">Privacy Policy</a>
+  </div>
+  <div className="flex items-center gap-4 text-slate-400">
+    <a href="#" className="hover:text-sky-500 transition-colors" aria-label="Website"><Globe className="w-4 h-4" /></a>
+    <a href="#" className="hover:text-sky-500 transition-colors" aria-label="Community"><MessageSquare className="w-4 h-4" /></a>
+    <a href="#" className="hover:text-sky-500 transition-colors" aria-label="Videos"><Video className="w-4 h-4" /></a>
+  </div>
+</footer>
+
     </div>
   );
 }

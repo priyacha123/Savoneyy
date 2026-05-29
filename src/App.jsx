@@ -7,12 +7,12 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 
-import LandingPage from "./components/LandingPage";
-import Savoney from "./pages/Main";
-import Login from "./pages/Login";
+import Savoney from "./components/Savoney";
+import Login from "./components/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Route, Routes } from "react-router-dom";
-import Signup from "./pages/SignUp";
+import Signup from "./components/SignUp";
+import LandingPage from "./components/LandingPage";
 
 function App() {
   return (
