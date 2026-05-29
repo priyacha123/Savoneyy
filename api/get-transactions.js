@@ -12,35 +12,35 @@ export default async function handler(req, res) {
 
   try {
 
-    const {
-      clerkId,
-      email,
-      fullName
-    } = req.body;
+    const { clerkId } = req.body;
 
-    // Check if user already exists
-    const existingUser =
+    // Find user
+    const dbUser =
       await prisma.user.findUnique({
         where: {
           clerkId,
         },
       });
 
-    if (existingUser) {
-      return res.status(200).json(existingUser);
+    if (!dbUser) {
+      return res.status(404).json({
+        error: "User not found",
+      });
     }
 
-    // Create new user
-    const user =
-      await prisma.user.create({
-        data: {
-          clerkId,
-          email,
-          fullName,
+    // Fetch only this user's transactions
+    const transactions =
+      await prisma.transaction.findMany({
+        where: {
+          userId: dbUser.id,
+        },
+
+        orderBy: {
+          createdAt: "desc",
         },
       });
 
-    return res.status(201).json(user);
+    return res.status(200).json(transactions);
 
   } catch (error) {
 

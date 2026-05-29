@@ -9,6 +9,9 @@ export default function Savoney() {
   const [budgets, setBudgets] = useState({});
   const [budgetList, setBudgetList] = useState([]);
   const [expenseOptions, setExpenseOptions] = useState([]);
+  // --- Transaction Filter States ---
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedDate, setSelectedDate] = useState("");
 
   // --- Form Inputs State ---
   const [incomeAmount, setIncomeAmount] = useState("");
@@ -99,15 +102,16 @@ export default function Savoney() {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: { display: true, position: "top" },
-          title: { display: true, text: "Income Sources" }
+          title: { display: false }
         }
       }
     });
 
     return () => { if (incomeChartInstance.current) incomeChartInstance.current.destroy(); };
-  }, []);
+  }, [incomeList]);
 
   useEffect(() => {
     const savedExpenseChartData = JSON.parse(localStorage.getItem("expenseChartData")) || { labels: [], datasets: [{ data: [] }] };
@@ -132,15 +136,16 @@ export default function Savoney() {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: { position: "top" },
-          title: { display: true, text: "Expense Sources" }
+          title: { display: false }
         }
       }
     });
 
     return () => { if (expenseChartInstance.current) expenseChartInstance.current.destroy(); };
-  }, []);
+  }, [expenseList]);
 
   // --- Core Handler Functions ---
   const handleAddIncome = () => {
@@ -267,7 +272,7 @@ export default function Savoney() {
   return (
     <div className="m-0 p-0 box-border scroll-smooth bg-gray-100 min-h-screen text-black antialiased font-sans">
       {/* --- Navbar Configuration --- */}
-      <nav className="h-[70px] w-full fixed top-0 left-0 flex flex-row justify-start items-center text-center z-50 bg-white shadow-sm border-b border-gray-200 px-5 select-none">
+      <nav className="h-[70px] w-full fixed top-0 left-0 flex flex-row justify-start items-center z-50 bg-white shadow-sm border-b border-gray-200 px-6 select-none">
         <i className="bx bx-menu text-2xl mr-5 cursor-pointer text-gray-700" onClick={() => setSidebarOpen(!sidebarOpen)}></i>
         <h1 className="text-[22px] font-bold text-[#333333] tracking-tight">Savoney</h1>
       </nav>
@@ -275,19 +280,17 @@ export default function Savoney() {
       {/* --- Replicated Mockup Sidebar Component (Fixed Overlay Depth) --- */}
       <div 
         id="sidebar" 
-        className={`fixed top-0 h-screen w-[270px] bg-white border-r border-gray-100 transition-all duration-300 ease-in-out z-[999] shadow-2xl ${
+        className={`fixed top-0 h-screen w-[270px] bg-white border-r border-gray-200 transition-all duration-300 ease-in-out z-[999] shadow-2xl ${
           sidebarOpen ? "left-0" : "-left-[270px]"
         }`}
       >
-        {/* Brand Header Group */}
         <div className="flex items-center gap-5 pt-[22px] pl-[25px] select-none">
           <i className="bx bx-menu text-2xl cursor-pointer text-[#333333]" onClick={() => setSidebarOpen(false)} />
           <h1 className="text-[22px] font-bold text-[#333333] tracking-tight">Savoney</h1>
         </div>
 
-        {/* Unified Options List */}
         <div className="mt-[55px] px-[25px]">
-          <ul className="list-none p-0 m-0 space-y-10">
+          <ul className="list-none p-0 m-0 space-y-6">
             {menuItems.map((item) => (
               <li key={item.name}>
                 <a
@@ -301,7 +304,6 @@ export default function Savoney() {
               </li>
             ))}
 
-            {/* Core Reset Navigation Item Link */}
             <li>
               <a
                 href="#reset"
@@ -319,40 +321,40 @@ export default function Savoney() {
       {/* --- Landing Showcase Hero Area --- */}
       <header className="pt-[70px]">
         <div 
-          className="h-[60vh] lg:h-screen w-full flex justify-center items-center m-0 p-0 text-white bg-cover bg-no-repeat bg-bottom" 
+          className="h-[35vh] lg:h-[45vh] w-full flex justify-center items-center m-0 p-0 text-white bg-cover bg-no-repeat bg-bottom" 
           style={{ backgroundImage: "url('https://savoney.netlify.app/assessts/bg169.svg')" }}
         >
-          <h1 className="text-4xl lg:text-7xl font-bold text-center tracking-wide drop-shadow-md px-4">
+          <h1 className="text-4xl lg:text-6xl font-bold text-center tracking-wide drop-shadow-md px-4">
             Welcome to SAVONEY
           </h1>
         </div>
       </header>
 
       {/* --- Primary Application Content Layout --- */}
-      <main 
+      <main
         onClick={() => { if(sidebarOpen) setSidebarOpen(false); }}
-        className="max-w-[1400px] mx-auto px-4 lg:px-8 py-10 space-y-16"
+        className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10"
       >
         
         {/* --- Section: Dashboard --- */}
-        <section id="dashboard" className="scroll-mt-20">
+        <section id="dashboard" className="scroll-mt-24">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-            <div className="flex justify-start items-center border-b-2 border-gray-800 pb-3 mb-8">
-              <i className="uil uil-tachometer-fast-alt bg-blue-600 text-white text-2xl lg:text-3xl rounded-xl p-2 mr-3 flex items-center justify-center w-10 h-10"></i>
-              <h2 className="text-2xl font-bold text-gray-800">Dashboard</h2>
+            <div className="flex justify-start items-center border-b border-gray-200 pb-4 mb-6">
+              <i className="uil uil-tachometer-fast-alt bg-blue-600 text-white text-xl rounded-xl p-2 mr-4 flex items-center justify-center w-10 h-10 flex-shrink-0"></i>
+              <h2 className="text-xl font-bold text-gray-800">Dashboard</h2>
             </div>
             
-            <div className="flex flex-col lg:flex-row gap-6 justify-center items-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 { title: "Total Balance", value: metrics.balance, icon: "uil-thumbs-up" },
                 { title: "Total Income", value: metrics.income, icon: "uil-comments" },
                 { title: "Total Expense", value: metrics.expense, icon: "uil-share" },
               ].map((card, i) => (
-                <div key={i} className="text-center p-8 w-full lg:w-[22vw] rounded-2xl bg-blue-600 text-white shadow-md transform hover:scale-[1.02] transition">
-                  <ul className="list-none space-y-2">
-                    <li><i className={`uil ${card.icon} text-3xl`}></i></li>
-                    <li><h3 className="text-lg font-medium opacity-90">{card.title}</h3></li>
-                    <li><h2 className="text-3xl font-bold tracking-tight">{card.value}</h2></li>
+                <div key={i} className="text-center p-6 w-full rounded-2xl bg-blue-600 text-white shadow-sm hover:shadow-md transform hover:scale-[1.01] transition duration-200 flex flex-col justify-center items-center min-h-[140px]">
+                  <ul className="list-none space-y-2 p-0 m-0">
+                    <li><i className={`uil ${card.icon} text-2xl`}></i></li>
+                    <li><h3 className="text-sm font-medium opacity-90">{card.title}</h3></li>
+                    <li><h2 className="text-2xl font-bold tracking-tight font-mono">₹{card.value.toLocaleString('en-IN')}</h2></li>
                   </ul>
                 </div>
               ))}
@@ -361,31 +363,31 @@ export default function Savoney() {
         </section>
 
         {/* --- Section: Income Management --- */}
-        <section id="income" className="scroll-mt-20">
-          <div className="flex flex-col lg:flex-row justify-between gap-6">
+        <section id="income" className="scroll-mt-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
             {/* Income Details Form */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 w-full lg:w-[32vw] flex flex-col justify-between">
+            <div className="lg:col-span-4 bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between">
               <div>
-                <div className="flex justify-start items-center border-b-2 border-gray-800 pb-3 mb-6">
-                  <i className="uil uil-tachometer-fast-alt bg-blue-600 text-white text-xl rounded-lg p-2 mr-3"></i>
-                  <h2 className="text-xl font-bold">Income Details</h2>
+                <div className="flex justify-start items-center border-b border-gray-200 pb-4 mb-5">
+                  <i className="uil uil-tachometer-fast-alt bg-blue-600 text-white text-lg rounded-lg p-2 mr-4 flex-shrink-0"></i>
+                  <h2 className="text-lg font-bold text-gray-800">Income Details</h2>
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <h4 className="font-semibold text-sm mb-1 text-gray-700">Amount</h4>
-                    <input type="number" value={incomeAmount} onChange={(e) => setIncomeAmount(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter Amount" />
+                    <h4 className="font-semibold text-xs mb-1.5 text-gray-700">Amount</h4>
+                    <input type="number" value={incomeAmount} onChange={(e) => setIncomeAmount(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm" placeholder="Enter Amount" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm mb-1 text-gray-700">Date</h4>
-                    <input type="date" value={incomeDate} onChange={(e) => setIncomeDate(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <h4 className="font-semibold text-xs mb-1.5 text-gray-700">Date</h4>
+                    <input type="date" value={incomeDate} onChange={(e) => setIncomeDate(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm mb-1 text-gray-700">Remarks</h4>
-                    <input type="text" value={incomeRemarks} onChange={(e) => setIncomeRemarks(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter income remarks" />
+                    <h4 className="font-semibold text-xs mb-1.5 text-gray-700">Remarks</h4>
+                    <input type="text" value={incomeRemarks} onChange={(e) => setIncomeRemarks(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm" placeholder="Enter income remarks" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm mb-1 text-gray-700">Types of source</h4>
-                    <select value={incomeSource} onChange={(e) => setIncomeSource(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <h4 className="font-semibold text-xs mb-1.5 text-gray-700">Types of source</h4>
+                    <select value={incomeSource} onChange={(e) => setIncomeSource(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
                       <option value="select-type">Select type</option>
                       <option value="earning">Earning</option>
                       <option value="saving">Saving</option>
@@ -394,130 +396,138 @@ export default function Savoney() {
                   </div>
                 </div>
               </div>
-              <button onClick={handleAddIncome} className="w-full lg:w-[150px] h-[35px] mt-6 bg-blue-600 text-white rounded-lg flex items-center justify-center font-medium gap-2 hover:bg-blue-700 transition self-center text-sm">
+              <button onClick={handleAddIncome} className="w-full h-10 mt-6 bg-blue-600 text-white rounded-lg flex items-center justify-center font-medium gap-2 hover:bg-blue-700 transition text-sm">
                 Add <i className="uil uil-navigator"></i>
               </button>
             </div>
 
             {/* Income History View */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 w-full lg:w-[32vw]">
-              <div className="flex justify-start items-center border-b-2 border-gray-800 pb-3 mb-6">
-                <i className="uil uil-tachometer-fast-alt bg-blue-600 text-white text-xl rounded-lg p-2 mr-3"></i>
-                <h2 className="text-xl font-bold">Income History</h2>
+            <div className="lg:col-span-5 bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col">
+              <div className="flex justify-start items-center border-b border-gray-200 pb-4 mb-5">
+                <i className="uil uil-navigator bg-blue-600 text-white text-lg rounded-lg p-2 mr-4 flex-shrink-0"></i>
+                <h2 className="text-lg font-bold text-gray-800">Income History</h2>
               </div>
-              <div className="max-h-[400px] overflow-y-auto space-y-3 pr-2">
-                {incomeList.map((item, idx) => (
-                  <div key={idx} className="flex justify-center items-center py-2 text-center">
-                    <p className="bg-[#1bcfb4] p-3 rounded-full text-sm font-semibold text-gray-800 w-full shadow-sm">
-                      {item.amount} <span className="text-white font-normal px-1">from</span> {item.remarks} <span className="text-white font-normal px-1">on</span> {item.date} <span className="text-white font-normal px-1">as</span> {item.source}
-                    </p>
-                  </div>
-                ))}
+              <div className="flex-1 max-h-[340px] overflow-y-auto space-y-3 pr-1">
+                {incomeList.length === 0 ? (
+                  <p className="text-gray-400 text-sm text-center py-12">No income instances recorded yet.</p>
+                ) : (
+                  incomeList.map((item, idx) => (
+                    <div key={idx} className="w-full">
+                      <p className="bg-[#1bcfb4] p-3 rounded-xl text-xs font-semibold text-gray-800 shadow-sm m-0 leading-relaxed">
+                        ₹{item.amount} <span className="text-white font-normal px-0.5">from</span> {item.remarks} <span className="text-white font-normal px-0.5">on</span> {item.date} <span className="text-white font-normal px-0.5">as</span> <span className="capitalize">{item.source}</span>
+                      </p>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
 
             {/* Income Allocation Chart */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 w-full lg:w-[32vw] flex flex-col items-center">
-              <div className="flex justify-start items-center border-b-2 border-gray-800 pb-3 mb-6 w-full">
-                <i className="uil uil-tachometer-fast-alt bg-blue-600 text-white text-xl rounded-lg p-2 mr-3"></i>
-                <h2 className="text-xl font-bold">Income Chart</h2>
+            <div className="lg:col-span-3 bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col items-center">
+              <div className="flex justify-start items-center border-b border-gray-200 pb-4 mb-5 w-full">
+                <i className="uil uil-chart bg-blue-600 text-white text-lg rounded-lg p-2 mr-4 flex-shrink-0"></i>
+                <h2 className="text-lg font-bold text-gray-800">Income Chart</h2>
               </div>
-              <div className="w-full max-w-[320px] flex justify-center items-center">
-                <canvas ref={incomeChartRef} width="320" height="320"></canvas>
+              <div className="w-full flex-1 flex justify-center items-center min-h-[250px] relative">
+                <canvas ref={incomeChartRef}></canvas>
               </div>
             </div>
           </div>
         </section>
 
         {/* --- Section: Budget Limits Management --- */}
-        <section id="budget" className="scroll-mt-20">
-          <div className="flex flex-col lg:flex-row justify-center gap-6">
+        <section id="budget" className="scroll-mt-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
             {/* Budget Definitions Entry Form */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 w-full lg:w-[32vw] flex flex-col justify-between">
+            <div className="lg:col-span-4 bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between">
               <div>
-                <div className="flex justify-start items-center border-b-2 border-gray-800 pb-3 mb-6">
-                  <i className="uil uil-tachometer-fast-alt bg-blue-600 text-white text-xl rounded-lg p-2 mr-3"></i>
-                  <h2 className="text-xl font-bold">Budget Details</h2>
+                <div className="flex justify-start items-center border-b border-gray-200 pb-4 mb-5">
+                  <i className="uil uil-tachometer-fast-alt bg-blue-600 text-white text-lg rounded-lg p-2 mr-4 flex-shrink-0"></i>
+                  <h2 className="text-lg font-bold text-gray-800">Budget Details</h2>
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <h4 className="font-semibold text-sm mb-1 text-gray-700">Budget</h4>
-                    <input type="number" value={budgetAmountInput} onChange={(e) => setBudgetAmountInput(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter Amount" />
+                    <h4 className="font-semibold text-xs mb-1.5 text-gray-700">Budget Amount</h4>
+                    <input type="number" value={budgetAmountInput} onChange={(e) => setBudgetAmountInput(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm" placeholder="Enter Amount" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm mb-1 text-gray-700">Type</h4>
-                    <input type="text" value={budgetCategoryInput} onChange={(e) => setBudgetCategoryInput(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter Type" />
+                    <h4 className="font-semibold text-xs mb-1.5 text-gray-700">Category Type</h4>
+                    <input type="text" value={budgetCategoryInput} onChange={(e) => setBudgetCategoryInput(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm" placeholder="Enter Type" />
                   </div>
                 </div>
               </div>
-              <button onClick={handleCategoryBudget} className="w-full lg:w-[150px] h-[35px] mt-6 bg-blue-600 text-white rounded-lg flex items-center justify-center font-medium gap-2 hover:bg-blue-700 transition self-center text-sm">
+              <button onClick={handleCategoryBudget} className="w-full h-10 mt-6 bg-blue-600 text-white rounded-lg flex items-center justify-center font-medium gap-2 hover:bg-blue-700 transition text-sm">
                 Next <i className="uil uil-navigator"></i>
               </button>
             </div>
 
             {/* Live Progress Bar Lists View Component */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 w-full lg:w-[60vw]">
-              <div className="flex justify-start items-center border-b-2 border-gray-800 pb-3 mb-6">
-                <i className="uil uil-tachometer-fast-alt bg-blue-600 text-white text-xl rounded-lg p-2 mr-3"></i>
-                <h2 className="text-xl font-bold">Budget List</h2>
+            <div className="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col">
+              <div className="flex justify-start items-center border-b border-gray-200 pb-4 mb-5">
+                <i className="uil uil-list-ul bg-blue-600 text-white text-lg rounded-lg p-2 mr-4 flex-shrink-0"></i>
+                <h2 className="text-lg font-bold text-gray-800">Budget Allocation List</h2>
               </div>
               
-              <div className="space-y-6 max-h-[400px] overflow-y-auto pr-2">
-                {Object.keys(budgets).map((category) => {
-                  const expenseAmountBar = expenseList.reduce((acc, obj) => obj.source === category ? acc + Number(obj.amount) : acc, 0) || budgets[category].expenses || 0;
-                  const budgetAmountBar = budgetList.find(b => b.type === category)?.amount || budgets[category].budget || 1;
-                  const percentageUsed = (expenseAmountBar / budgetAmountBar) * 100;
-                  const isOverBudget = percentageUsed > 100;
+              <div className="flex-1 overflow-y-auto space-y-4 pr-1 max-h-[300px]">
+                {Object.keys(budgets).length === 0 ? (
+                  <p className="text-gray-400 text-sm text-center py-12">No specific budget limits created yet.</p>
+                ) : (
+                  Object.keys(budgets).map((category) => {
+                    const expenseAmountBar = expenseList.reduce((acc, obj) => obj.source === category ? acc + Number(obj.amount) : acc, 0) || budgets[category].expenses || 0;
+                    const budgetAmountBar = budgetList.find(b => b.type === category)?.amount || budgets[category].budget || 1;
+                    const percentageUsed = (expenseAmountBar / budgetAmountBar) * 100;
+                    const isOverBudget = percentageUsed > 100;
 
-                  return (
-                    <div key={category} className="w-full border-b border-gray-100 pb-4 last:border-b-0">
-                      <div className="flex justify-between items-center mb-1 text-sm">
-                        <strong className="text-gray-800 text-base">{category}</strong>
-                        <span className="text-gray-500 font-mono text-xs">{expenseAmountBar.toFixed(0)} / {budgetAmountBar.toFixed(0)}</span>
+                    return (
+                      <div key={category} className="w-full border-b border-gray-100 pb-3 last:border-b-0">
+                        <div className="flex justify-between items-center mb-2 text-sm">
+                          <strong className="text-gray-800 text-sm font-semibold">{category}</strong>
+                          <span className="text-gray-500 font-mono text-xs">₹{expenseAmountBar.toFixed(0)} / ₹{budgetAmountBar.toFixed(0)}</span>
+                        </div>
+                        <div className="w-full h-6 bg-gray-200 rounded-md overflow-hidden relative shadow-inner">
+                          <div 
+                            className={`h-full transition-all duration-500 ease-in-out ${isOverBudget ? "bg-[#4979e8]" : "bg-[#1bcfb4]"}`}
+                            style={{ width: `${Math.min(percentageUsed, 100)}%` }}
+                          ></div>
+                          <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-[11px] font-bold text-gray-800 whitespace-nowrap">
+                            {percentageUsed.toFixed(1)}% Used
+                          </span>
+                        </div>
                       </div>
-                      <div className="w-full h-[30px] bg-gray-200 rounded-md overflow-hidden relative shadow-inner">
-                        <div 
-                          className={`h-full transition-all duration-500 ease-in-out ${isOverBudget ? "bg-[#4979e8]" : "bg-[#1bcfb4]"}`}
-                          style={{ width: `${Math.min(percentageUsed, 100)}%` }}
-                        ></div>
-                        <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs font-bold text-gray-800 drop-shadow-sm">
-                          {percentageUsed.toFixed(2)}%
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                )}
               </div>
             </div>
           </div>
         </section>
 
         {/* --- Section: Outflow Expense Processing --- */}
-        <section id="expense" className="scroll-mt-20">
-          <div className="flex flex-col lg:flex-row justify-between gap-6">
+        <section id="expense" className="scroll-mt-24">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
             {/* Expense Record Intake Form */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 w-full lg:w-[32vw] flex flex-col justify-between">
+            <div className="lg:col-span-4 bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between">
               <div>
-                <div className="flex justify-start items-center border-b-2 border-gray-800 pb-3 mb-6">
-                  <i className="uil uil-tachometer-fast-alt bg-blue-600 text-white text-xl rounded-lg p-2 mr-3"></i>
-                  <h2 className="text-xl font-bold">Expense Details</h2>
+                <div className="flex justify-start items-center border-b border-gray-200 pb-4 mb-5">
+                  <i className="uil uil-tachometer-fast-alt bg-blue-600 text-white text-lg rounded-lg p-2 mr-4 flex-shrink-0"></i>
+                  <h2 className="text-lg font-bold text-gray-800">Expense Details</h2>
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <h4 className="font-semibold text-sm mb-1 text-gray-700">Expense</h4>
-                    <input type="number" value={expenseAmountInput} onChange={(e) => setExpenseAmountInput(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your expense" />
+                    <h4 className="font-semibold text-xs mb-1.5 text-gray-700">Expense Amount</h4>
+                    <input type="number" value={expenseAmountInput} onChange={(e) => setExpenseAmountInput(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm" placeholder="Enter your expense" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm mb-1 text-gray-700">Date</h4>
-                    <input type="date" value={expenseDateInput} onChange={(e) => setExpenseDateInput(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <h4 className="font-semibold text-xs mb-1.5 text-gray-700">Date</h4>
+                    <input type="date" value={expenseDateInput} onChange={(e) => setExpenseDateInput(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm mb-1 text-gray-700">Remarks</h4>
-                    <input type="text" value={expenseRemarksInput} onChange={(e) => setExpenseRemarksInput(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter expense remarks" />
+                    <h4 className="font-semibold text-xs mb-1.5 text-gray-700">Remarks</h4>
+                    <input type="text" value={expenseRemarksInput} onChange={(e) => setExpenseRemarksInput(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm" placeholder="Enter expense remarks" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-sm mb-1 text-gray-700">Types of source</h4>
-                    <select value={expenseSourceInput} onChange={(e) => setExpenseSourceInput(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <h4 className="font-semibold text-xs mb-1.5 text-gray-700">Types of source</h4>
+                    <select value={expenseSourceInput} onChange={(e) => setExpenseSourceInput(e.target.value)} className="w-full h-10 border border-gray-300 rounded-lg px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
                       <option value="select-type">Select type</option>
                       {expenseOptions.map(opt => (
                         <option key={opt} value={opt}>{opt}</option>
@@ -526,36 +536,88 @@ export default function Savoney() {
                   </div>
                 </div>
               </div>
-              <button onClick={handleAddExpense} className="w-full lg:w-[150px] h-[35px] mt-6 bg-blue-600 text-white rounded-lg flex items-center justify-center font-medium gap-2 hover:bg-blue-700 transition self-center text-sm">
+              <button onClick={handleAddExpense} className="w-full h-10 mt-6 bg-blue-600 text-white rounded-lg flex items-center justify-center font-medium gap-2 hover:bg-blue-700 transition text-sm">
                 Next <i className="uil uil-navigator"></i>
               </button>
             </div>
 
             {/* Expense History Ledger Component */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 w-full lg:w-[32vw]">
-              <div className="flex justify-start items-center border-b-2 border-gray-800 pb-3 mb-6">
-                <i className="uil uil-tachometer-fast-alt bg-blue-600 text-white text-xl rounded-lg p-2 mr-3"></i>
-                <h2 className="text-xl font-bold">Expense History</h2>
+            <div className="lg:col-span-5 bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col">
+              <div className="flex justify-start items-center border-b border-gray-200 pb-4 mb-4">
+                <i className="uil uil-history bg-blue-600 text-white text-lg rounded-lg p-2 mr-4 flex-shrink-0"></i>
+                <h2 className="text-lg font-bold text-gray-800">Expense History</h2>
               </div>
-              <div className="max-h-[400px] overflow-y-auto space-y-3 pr-2">
-                {expenseList.map((item, idx) => (
-                  <div key={idx} className="flex justify-center items-center py-2 text-center">
-                    <p className="bg-[#1bcfb4] p-3 rounded-full text-sm font-semibold text-gray-800 w-full shadow-sm">
-                      {item.amount} <span className="text-white font-normal px-1">from</span> {item.remarks} <span className="text-white font-normal px-1">on</span> {item.date} <span className="text-white font-normal px-1">as</span> {item.source}
-                    </p>
+
+              {/* FILTERS */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="text-[11px] font-semibold text-gray-600 block mb-1">Filter Category</label>
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="w-full h-9 border border-gray-300 rounded-lg px-2 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="all">All Categories</option>
+                    {expenseOptions.map((category) => (
+                      <option key={category} value={category}>{category}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-[11px] font-semibold text-gray-600 block mb-1">Filter Date</label>
+                  <input
+                    type="date"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    className="w-full h-9 border border-gray-300 rounded-lg px-2 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                  />
+                </div>
+              </div>
+
+              {/* FILTERED TRANSACTIONS */}
+              <div className="flex-1 max-h-[240px] overflow-y-auto space-y-3 pr-1">
+                {expenseList
+                  .filter((item) => {
+                    const categoryMatch = selectedCategory === "all" || item.source === selectedCategory;
+                    const dateMatch = !selectedDate || item.date === selectedDate;
+                    return categoryMatch && dateMatch;
+                  })
+                  .map((item, idx) => (
+                    <div key={idx} className="bg-gradient-to-r from-[#1bcfb4] to-[#0ea5e9] rounded-xl p-3 shadow-sm text-white">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-bold text-sm font-mono">₹{item.amount}</h3>
+                          <p className="text-xs opacity-90 mt-0.5">{item.remarks}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">{item.source}</p>
+                          <p className="text-[10px] mt-0.5 opacity-90">{item.date}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                {/* Empty State */}
+                {expenseList.filter((item) => {
+                  const categoryMatch = selectedCategory === "all" || item.source === selectedCategory;
+                  const dateMatch = !selectedDate || item.date === selectedDate;
+                  return categoryMatch && dateMatch;
+                }).length === 0 && (
+                  <div className="text-center py-10 text-xs text-gray-400">
+                    No transactions matched your filters.
                   </div>
-                ))}
+                )}
               </div>
             </div>
 
             {/* Expense Distribution Visual Canvas Area */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 w-full lg:w-[32vw] flex flex-col items-center">
-              <div className="flex justify-start items-center border-b-2 border-gray-800 pb-3 mb-6 w-full">
-                <i className="uil uil-tachometer-fast-alt bg-blue-600 text-white text-xl rounded-lg p-2 mr-3"></i>
-                <h2 className="text-xl font-bold">Expense Chart</h2>
+            <div className="lg:col-span-3 bg-white rounded-2xl shadow-sm border border-gray-200 p-6 flex flex-col items-center">
+              <div className="flex justify-start items-center border-b border-gray-200 pb-4 mb-5 w-full">
+                <i className="uil uil-chart-pie bg-blue-600 text-white text-lg rounded-lg p-2 mr-4 flex-shrink-0"></i>
+                <h2 className="text-lg font-bold text-gray-800">Expense Chart</h2>
               </div>
-              <div className="w-full max-w-[320px] flex justify-center items-center">
-                <canvas ref={expenseChartRef} width="320" height="320"></canvas>
+              <div className="w-full flex-1 flex justify-center items-center min-h-[250px] relative">
+                <canvas ref={expenseChartRef}></canvas>
               </div>
             </div>
           </div>
@@ -564,7 +626,7 @@ export default function Savoney() {
       </main>
 
       {/* --- Footer Component --- */}
-      <footer className="w-full text-black text-center p-6 text-lg border-t border-gray-200 font-medium tracking-wide bg-white mt-12">
+      <footer className="w-full text-black text-center p-5 text-sm border-t border-gray-200 font-medium tracking-wide bg-white mt-12">
         made with ❤️ by <span className="text-blue-600 font-semibold">Priya</span>
       </footer>
     </div>

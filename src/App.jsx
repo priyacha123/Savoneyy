@@ -1,11 +1,7 @@
 import "./App.css";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
+import { useEffect } from "react";
+
 
 import Savoney from "./components/Savoney";
 import Login from "./components/Login";
@@ -15,6 +11,28 @@ import Signup from "./components/SignUp";
 import LandingPage from "./components/LandingPage";
 
 function App() {
+   const { user } = useUser();
+
+  useEffect(() => {
+
+    if (!user) return;
+
+    fetch("/api/create-user", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        clerkId: user.id,
+        email: user.primaryEmailAddress.emailAddress,
+        fullName: user.fullName,
+      }),
+    });
+
+  }, [user]);
+  
   return (
     <>
       {/* <header>
