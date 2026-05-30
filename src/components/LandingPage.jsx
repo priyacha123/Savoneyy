@@ -1,6 +1,8 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import HeroSection from "./custom/HeroSection";
+import GlobalStyle from "../Globalstyle";
 
 const FontLink = () => {
   useEffect(() => {
@@ -12,47 +14,6 @@ const FontLink = () => {
   }, []);
   return null;
 };
-
-const WalletIllustration = () => (
-  <svg viewBox="0 0 340 260" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", maxWidth: 360 }}>
-    <rect x="170" y="60" width="22" height="120" rx="4" fill="#BFDBFE" opacity="0.6" />
-    <rect x="200" y="40" width="22" height="140" rx="4" fill="#93C5FD" opacity="0.6" />
-    <rect x="230" y="70" width="22" height="110" rx="4" fill="#BFDBFE" opacity="0.6" />
-    <rect x="260" y="30" width="22" height="150" rx="4" fill="#60A5FA" opacity="0.7" />
-    <rect x="290" y="55" width="22" height="125" rx="4" fill="#93C5FD" opacity="0.6" />
-    {/* Trend line */}
-    <polyline points="181,155 211,130 241,145 271,95 310,70" stroke="#2E86FF" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-    <circle cx="310" cy="70" r="5" fill="#2E86FF" />
-    {/* Arrow down */}
-    <line x1="230" y1="30" x2="230" y2="58" stroke="#93C5FD" strokeWidth="2" strokeDasharray="4 3" />
-    <polygon points="225,55 235,55 230,65" fill="#93C5FD" />
-    {/* Wallet body */}
-    <rect x="45" y="100" width="170" height="115" rx="18" fill="#EFF6FF" stroke="#BFDBFE" strokeWidth="2" />
-    <rect x="45" y="100" width="170" height="42" rx="18" fill="#DBEAFE" />
-    <rect x="45" y="122" width="170" height="20" fill="#DBEAFE" />
-    {/* Wallet clasp */}
-    <rect x="175" y="130" width="48" height="30" rx="10" fill="#BAD9FB" stroke="#93C5FD" strokeWidth="1.5" />
-    <circle cx="199" cy="145" r="7" fill="#2E86FF" opacity="0.8" />
-    {/* Cards peeking out */}
-    <rect x="62" y="82" width="110" height="68" rx="12" fill="#93C5FD" opacity="0.5" transform="rotate(-8 62 82)" />
-    <rect x="70" y="78" width="110" height="68" rx="12" fill="#BAD9FB" opacity="0.7" transform="rotate(-3 70 78)" />
-    {/* Dollar signs on wallet */}
-    <text x="90" y="165" fontFamily="serif" fontSize="22" fill="#60A5FA" fontWeight="700">$</text>
-    <text x="120" y="185" fontFamily="serif" fontSize="16" fill="#93C5FD" fontWeight="600">$</text>
-    {/* Decorative dots */}
-    <circle cx="52" cy="55" r="5" fill="#BFDBFE" />
-    <circle cx="140" cy="35" r="4" fill="#93C5FD" opacity="0.5" />
-    <circle cx="330" cy="200" r="6" fill="#DBEAFE" />
-    <circle cx="25" cy="190" r="4" fill="#BAD9FB" opacity="0.6" />
-  </svg>
-);
-
-const ShieldIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-    <path d="M12 2L3 6v6c0 5.25 3.75 10.15 9 11.25C17.25 22.15 21 17.25 21 12V6l-9-4z" fill="#DBEAFE" stroke="#60A5FA" strokeWidth="1.5" strokeLinejoin="round" />
-    <path d="M9 12l2 2 4-4" stroke="#2E86FF" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
 
 const ChartIcon = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
@@ -92,22 +53,6 @@ const YoutubeIcon = () => (
 );
 
 /* ── Animated counter hook ── */
-function useCountUp(target, duration = 1800, start = false) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!start) return;
-    let startTime = null;
-    const step = (timestamp) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      setCount(Math.floor(progress * target));
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }, [target, duration, start]);
-  return count;
-}
-
 /* ── Styles object ── */
 const S = {
   // Layout
@@ -611,8 +556,6 @@ export default function SavoneyLanding() {
   const [hovered, setHovered] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [visible, setVisible] = useState(false);
-  const statsRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -621,21 +564,9 @@ export default function SavoneyLanding() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
-      { threshold: 0.4 }
-    );
-    if (statsRef.current) observer.observe(statsRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  const users = useCountUp(250, 1800, visible);
-  const tracked = useCountUp(24, 1800, visible);
-  const rating = useCountUp(49, 1800, visible);
-
   return (
     <>
+    <GlobalStyle />
       <FontLink />
       <div style={S.page}>
 
@@ -645,16 +576,16 @@ export default function SavoneyLanding() {
           boxShadow: scrolled ? "0 4px 24px rgba(96,165,250,0.12)" : "none",
           transition: "box-shadow .3s",
         }}>
-          <a href="#" style={S.navLogo}>
+          <Link to="#" style={S.navLogo}>
             <WalletNavIcon />
             <span style={S.logoText}>Savoney</span>
-          </a>
+          </Link>
 
           <ul style={S.navLinks}>
             {["Features", "Pricing", "About", "Blog"].map((l) => (
               <li key={l}>
-                <a
-                  href="#"
+                <Link
+                  to="#"
                   style={{
                     ...S.navLink,
                     color: hovered === `nav-${l}` ? "#1D4ED8" : "#4B7FCC",
@@ -663,7 +594,7 @@ export default function SavoneyLanding() {
                   onMouseLeave={() => setHovered(null)}
                 >
                   {l}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -707,116 +638,7 @@ export default function SavoneyLanding() {
             <div style={{ width: 22, height: 2, background: "#2E86FF", borderRadius: 2 }} />
           </button>
         </nav>
-
-        {/* ── HERO ── */}
-        <section style={S.hero}>
-          <div>
-            <div style={S.heroEyebrow}>
-              <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#34D399", boxShadow: "0 0 6px #34D399" }} />
-              Now with AI-powered insights
-            </div>
-
-            <h1 style={S.heroH1}>
-              Savoney: Your{" "}
-              <span style={S.heroH1Italic}>Simple</span>
-              <br />
-              Financial Partner
-            </h1>
-
-            <p style={S.heroSub}>
-              Achieve financial clarity effortlessly. Track, budget, and grow your wealth — with beautiful tools that make money management a joy.
-            </p>
-
-<SignedOut>
-  <SignInButton mode="modal" asChild>
-    <button
-      style={{
-        ...S.btnCreateAccount,
-        transform: hovered === "cta" ? "translateY(-2px)" : "none",
-        boxShadow:
-          hovered === "cta"
-            ? "0 14px 36px rgba(46,134,255,0.5)"
-            : "0 8px 28px rgba(46,134,255,0.38)",
-      }}
-      onMouseEnter={() => setHovered("cta")}
-      onMouseLeave={() => setHovered(null)}
-    >
-      Create Account →
-    </button>
-  </SignInButton>
-</SignedOut>
-
-<SignedIn>
-  <button
-    onClick={() => navigate("/dashboard")}
-    style={{
-      ...S.btnGetStarted,
-    }}
-  >
-    Dashboard
-  </button>
-</SignedIn>
-
-            {/* Trust chips */}
-            <div style={{ display: "flex", gap: 20, marginTop: 36, alignItems: "center" }}>
-              {["Free forever", "No credit card", "256-bit encryption"].map((t) => (
-                <div key={t} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#6BA3D6", fontWeight: 500 }}>
-                  <span style={{ color: "#34D399", fontWeight: 800 }}>✓</span> {t}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div style={S.heroIllustration}>
-            <div style={S.illustrationWrap}>
-              <div style={S.illustrationDeco} />
-              <WalletIllustration />
-              {/* Floating badge */}
-              <div style={{
-                position: "absolute",
-                bottom: 24,
-                left: 24,
-                background: "#fff",
-                borderRadius: 14,
-                padding: "10px 16px",
-                boxShadow: "0 8px 24px rgba(96,165,250,0.2)",
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-                border: "1px solid #DBEAFE",
-              }}>
-                <div style={{ width: 32, height: 32, borderRadius: 10, background: "linear-gradient(135deg,#2E86FF,#60A5FA)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15 }}>📈</div>
-                <div>
-                  <div style={{ fontSize: 11, color: "#93C5FD", fontWeight: 600 }}>This month</div>
-                  <div style={{ fontSize: 14, fontWeight: 800, color: "#1D4ED8" }}>+₹18,400 saved</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── STATS BAR ── */}
-        <div style={S.statsBar} ref={statsRef}>
-          <div style={S.statsInner}>
-            {[
-              { num: `${users}K+`, label: "Active users" },
-              { num: `$${tracked / 10}B+`, label: "Tracked monthly" },
-              { num: `${(rating / 10).toFixed(1)}★`, label: "App Store rating" },
-              { num: "99.9%", label: "Uptime SLA" },
-            ].map((s, i) => (
-              <div
-                key={i}
-                style={{
-                  ...S.statItem,
-                  borderRight: i < 3 ? "1px solid rgba(147,197,253,0.4)" : "none",
-                }}
-              >
-                <div style={S.statNum}>{s.num}</div>
-                <div style={S.statLabel}>{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
+      <HeroSection />
 
         {/* ── FEATURES ── */}
         <section style={S.features} id="features">
@@ -911,10 +733,10 @@ export default function SavoneyLanding() {
         <footer style={S.footer}>
           <div style={S.footerTop}>
             <div>
-              <a href="#" style={S.navLogo}>
+              <Link to="#" style={S.navLogo}>
                 <WalletNavIcon />
                 <span style={S.logoText}>Savoney</span>
-              </a>
+              </Link>
               <p style={S.footerBrandDesc}>
                 The smartest way to track income, manage expenses, and grow your savings — effortlessly.
               </p>
@@ -930,8 +752,8 @@ export default function SavoneyLanding() {
                 <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
                   {col.links.map((l) => (
                     <li key={l}>
-                      <a
-                        href="#"
+                      <Link
+                        to="#"
                         style={{
                           ...S.footerLink,
                           color: hovered === `fl-${l}` ? "#1D4ED8" : "#93C5FD",
@@ -940,7 +762,7 @@ export default function SavoneyLanding() {
                         onMouseLeave={() => setHovered(null)}
                       >
                         {l}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -952,7 +774,7 @@ export default function SavoneyLanding() {
             <ul style={S.footerLinks}>
               {["About", "Terms of Service", "Privacy Policy"].map((l) => (
                 <li key={l}>
-                  <a href="#" style={S.footerLink}>{l}</a>
+                  <Link to="#" style={S.footerLink}>{l}</Link>
                 </li>
               ))}
             </ul>

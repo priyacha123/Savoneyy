@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useUser } from "@clerk/clerk-react";
 import Navbar from "./custom/Navbar";
 import SummaryCards from "./custom/SummaryCards";
 import IncomeSection from "./custom/IncomeSection";
@@ -6,156 +7,223 @@ import BudgetSection from "./custom/BudgetSection";
 import ExpenseSection from "./custom/ExpenseSection";
 import Footer from "./custom/Footer";
 import GlobalStyle from "../Globalstyle";
-import HeroSection from "./custom/HeroSection";
+// import HeroSection from "./custom/HeroSection";
 import { PALETTE } from "../../utility/tokens";
+import {
+  addBudget,
+  addExpense,
+  addIncome,
+  createUser,
+  getBudgets,
+  getExpenses,
+  getIncome,
+} from "../lib/api";
+
+function budgetsToMap(items, expenses) {
+  return items.reduce((acc, budget) => {
+    const spent = expenses.reduce(
+      (sum, expense) => (expense.source === budget.type ? sum + Number(expense.amount) : sum),
+      0,
+    );
+
+    acc[budget.type] = {
+      budget: Number(budget.amount),
+      expenses: spent,
+    };
+
+    return acc;
+  }, {});
+}
 
 export default function Savoney() {
+  const { user, isLoaded } = useUser();
+  const clerkId = user?.id;
+  const email = user?.primaryEmailAddress?.emailAddress || user?.emailAddresses?.[0]?.emailAddress || "";
+  const fullName = user?.fullName || "";
 
-  // ── Core state ────────────────────────────
-  const [incomeList,      setIncomeList]      = useState([]);
-  const [expenseList,     setExpenseList]     = useState([]);
-  const [budgets,         setBudgets]         = useState({});
-  const [budgetList,      setBudgetList]      = useState([]);
-  const [expenseOptions,  setExpenseOptions]  = useState([]);
+  const [incomeList, setIncomeList] = useState([]);
+  const [expenseList, setExpenseList] = useState([]);
+  const [budgets, setBudgets] = useState({});
+  const [budgetList, setBudgetList] = useState([]);
+  const [expenseOptions, setExpenseOptions] = useState([]);
+  const [isDashboardLoading, setIsDashboardLoading] = useState(false);
+  const [dashboardError, setDashboardError] = useState("");
 
-  // ── Filter state ──────────────────────────
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedDate,     setSelectedDate]      = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
 
-  // ── Income form state ─────────────────────
-  const [incomeAmount,  setIncomeAmount]  = useState("");
-  const [incomeDate,    setIncomeDate]    = useState("");
+  const [incomeAmount, setIncomeAmount] = useState("");
+  const [incomeDate, setIncomeDate] = useState("");
   const [incomeRemarks, setIncomeRemarks] = useState("");
-  const [incomeSource,  setIncomeSource]  = useState("select-type");
+  const [incomeSource, setIncomeSource] = useState("select-type");
 
-  // ── Budget form state ─────────────────────
-  const [budgetAmountInput,   setBudgetAmountInput]   = useState("");
+  const [budgetAmountInput, setBudgetAmountInput] = useState("");
   const [budgetCategoryInput, setBudgetCategoryInput] = useState("");
 
-  // ── Expense form state ────────────────────
-  const [expenseAmountInput,  setExpenseAmountInput]  = useState("");
-  const [expenseDateInput,    setExpenseDateInput]    = useState("");
+  const [expenseAmountInput, setExpenseAmountInput] = useState("");
+  const [expenseDateInput, setExpenseDateInput] = useState("");
   const [expenseRemarksInput, setExpenseRemarksInput] = useState("");
-  const [expenseSourceInput,  setExpenseSourceInput]  = useState("select-type");
+  const [expenseSourceInput, setExpenseSourceInput] = useState("select-type");
 
-  // ── Derived metrics ───────────────────────
-  const [metrics, setMetrics] = useState({ balance: 0, income: 0, expense: 0 });
-
-  // ── Hydrate from localStorage ─────────────
   useEffect(() => {
-    const savedIncome   = JSON.parse(localStorage.getItem("incomeList"))    || [];
-    const savedExpense  = JSON.parse(localStorage.getItem("expenseList"))   || [];
-    const savedBudgets  = JSON.parse(localStorage.getItem("budgets"))       || {};
-    const savedOptions  = JSON.parse(localStorage.getItem("expenseOptions"))|| [];
+    if (!isLoaded) return;
+    if (!clerkId) return;
 
-    setIncomeList(savedIncome);
-    setExpenseList(savedExpense);
-    setBudgets(savedBudgets);
-    setExpenseOptions(savedOptions);
+    let ignore = false;
 
-    const generated = Object.keys(savedBudgets).map((cat) => ({
-      amount: savedBudgets[cat].budget,
-      type: cat,
-    }));
-    setBudgetList(generated);
-  }, []);
+    async function loadDashboard() {
+      setIsDashboardLoading(true);
+      setDashboardError("");
 
-  // ── Sync metrics + localStorage on every mutation ──
-  useEffect(() => {
-    const totalInc = incomeList.reduce((sum, item) => sum + Number(item.amount), 0);
-    const totalExp = expenseList.reduce((sum, item) => sum + Number(item.amount), 0);
-    setMetrics({ income: totalInc, expense: totalExp, balance: totalInc - totalExp });
-    localStorage.setItem("incomeList",  JSON.stringify(incomeList));
-    localStorage.setItem("expenseList", JSON.stringify(expenseList));
-    localStorage.setItem("budgets",     JSON.stringify(budgets));
-  }, [incomeList, expenseList, budgets]);
+      try {
+        await createUser({
+          clerkId,
+          email,
+          fullName,
+        });
 
-  // ── Handlers ─────────────────────────────
-  const handleAddIncome = () => {
+        const [income, expenses, budgetItems] = await Promise.all([
+          getIncome(clerkId),
+          getExpenses(clerkId),
+          getBudgets(clerkId),
+        ]);
+
+        if (ignore) return;
+
+        setIncomeList(income);
+        setExpenseList(expenses);
+        setBudgetList(budgetItems);
+        setExpenseOptions(budgetItems.map((item) => item.type));
+        setBudgets(budgetsToMap(budgetItems, expenses));
+      } catch (error) {
+        if (!ignore) {
+          setDashboardError(error.message || "Unable to load dashboard data.");
+        }
+      } finally {
+        if (!ignore) {
+          setIsDashboardLoading(false);
+        }
+      }
+    }
+
+    loadDashboard();
+
+    return () => {
+      ignore = true;
+    };
+  }, [isLoaded, clerkId, email, fullName]);
+
+  const totalIncome = incomeList.reduce((sum, item) => sum + Number(item.amount), 0);
+  const totalExpense = expenseList.reduce((sum, item) => sum + Number(item.amount), 0);
+  const metrics = {
+    income: totalIncome,
+    expense: totalExpense,
+    balance: totalIncome - totalExpense,
+  };
+
+  const handleAddIncome = async () => {
+    if (!clerkId) return;
     const amt = Number(incomeAmount);
     if (!amt || !incomeDate) { alert("Please enter a valid amount and date."); return; }
-    setIncomeList((prev) => [
-      ...prev,
-      { amount: amt, date: incomeDate, remarks: incomeRemarks || "N/A",
-        source: incomeSource === "select-type" ? "Other" : incomeSource },
-    ]);
-    setIncomeAmount(""); setIncomeDate(""); setIncomeRemarks(""); setIncomeSource("select-type");
+    if (incomeSource === "select-type") { alert("Please select an income source."); return; }
+
+    try {
+      const income = await addIncome({
+        clerkId,
+        amount: amt,
+        date: incomeDate,
+        remarks: incomeRemarks || "N/A",
+        source: incomeSource,
+      });
+
+      setIncomeList((prev) => [income, ...prev]);
+      setIncomeAmount(""); setIncomeDate(""); setIncomeRemarks(""); setIncomeSource("select-type");
+    } catch (error) {
+      alert(error.message || "Unable to add income.");
+    }
   };
 
-  const handleCategoryBudget = () => {
+  const handleCategoryBudget = async () => {
+    if (!clerkId) return;
     const category = budgetCategoryInput.trim();
-    const amt      = parseFloat(budgetAmountInput);
+    const amt = parseFloat(budgetAmountInput);
     if (isNaN(amt) || amt <= 0) { alert("Budget amount must be a positive number."); return; }
-    if (!category)              { alert("Please enter a valid budget category."); return; }
+    if (!category) { alert("Please enter a valid budget category."); return; }
 
-    setBudgetList((prev) => [...prev, { amount: amt, type: category }]);
-    setBudgets((prev) => {
-      const updated = { ...prev };
-      if (!updated[category]) updated[category] = { budget: 0, expenses: 0 };
-      updated[category].budget = amt;
-      return updated;
-    });
-    setExpenseOptions((prev) => {
-      if (prev.includes(category)) return prev;
-      const next = [...prev, category];
-      localStorage.setItem("expenseOptions", JSON.stringify(next));
-      return next;
-    });
-    setBudgetAmountInput(""); setBudgetCategoryInput("");
+    try {
+      const budget = await addBudget({ clerkId, type: category, amount: amt });
+
+      setBudgetList((prev) => {
+        const withoutExisting = prev.filter((item) => item.type !== budget.type);
+        return [budget, ...withoutExisting];
+      });
+      setBudgets((prev) => ({
+        ...prev,
+        [budget.type]: {
+          budget: Number(budget.amount),
+          expenses: prev[budget.type]?.expenses || 0,
+        },
+      }));
+      setExpenseOptions((prev) => (prev.includes(budget.type) ? prev : [...prev, budget.type]));
+      setBudgetAmountInput(""); setBudgetCategoryInput("");
+    } catch (error) {
+      alert(error.message || "Unable to save budget.");
+    }
   };
 
-  const handleAddExpense = () => {
-    const amt      = parseFloat(expenseAmountInput);
+  const handleAddExpense = async () => {
+    if (!clerkId) return;
+    const amt = parseFloat(expenseAmountInput);
     const category = expenseSourceInput;
-    if (isNaN(amt) || amt <= 0)            { alert("Expense amount must be a positive number."); return; }
-    if (category === "select-type")        { alert("Please select a valid expense category."); return; }
-    if (!budgets[category])                { alert(`No budget limit exists for "${category}". Please create a budget first.`); return; }
+    if (isNaN(amt) || amt <= 0) { alert("Expense amount must be a positive number."); return; }
+    if (category === "select-type") { alert("Please select a valid expense category."); return; }
+    if (!budgets[category]) { alert(`No budget limit exists for "${category}". Please create a budget first.`); return; }
+    if (!expenseDateInput) { alert("Please select an expense date."); return; }
 
-    setExpenseList((prev) => [
-      ...prev,
-      { amount: amt, date: expenseDateInput, remarks: expenseRemarksInput || "N/A", source: category },
-    ]);
-    setBudgets((prev) => {
-      const updated = { ...prev };
-      updated[category].expenses = (updated[category].expenses || 0) + amt;
-      return updated;
-    });
-    setExpenseAmountInput(""); setExpenseDateInput(""); setExpenseRemarksInput(""); setExpenseSourceInput("select-type");
+    try {
+      const expense = await addExpense({
+        clerkId,
+        amount: amt,
+        date: expenseDateInput,
+        remarks: expenseRemarksInput || "N/A",
+        source: category,
+      });
+
+      setExpenseList((prev) => [expense, ...prev]);
+      setBudgets((prev) => ({
+        ...prev,
+        [category]: {
+          ...prev[category],
+          expenses: (prev[category]?.expenses || 0) + Number(expense.amount),
+        },
+      }));
+      setExpenseAmountInput(""); setExpenseDateInput(""); setExpenseRemarksInput(""); setExpenseSourceInput("select-type");
+    } catch (error) {
+      alert(error.message || "Unable to add expense.");
+    }
   };
 
   const resetData = () => {
-    if (window.confirm("Are you sure you want to reset all data? This cannot be undone.")) {
-      localStorage.clear();
-      window.location.reload();
-    }
+    window.location.reload();
   };
 
   const formattedDate = new Date().toLocaleDateString("en-IN", {
     year: "numeric", month: "short", day: "numeric",
   });
 
-  // ── Render ────────────────────────────────
   return (
     <>
       <GlobalStyle />
       <div style={{ background: PALETTE.bg, minHeight: "100vh", fontFamily: "'DM Sans', sans-serif" }}>
-
         <Navbar formattedDate={formattedDate} resetData={resetData} />
-
-        <HeroSection />
+        {/* <HeroSection /> */}
 
         <main style={{ maxWidth: 1280, margin: "0 auto", padding: "60px 32px 80px" }}>
-
-          {/* Dashboard header */}
           <div id="dashboard" style={{
             display: "flex", alignItems: "center", justifyContent: "space-between",
             marginBottom: 36,
           }}>
             <div>
-              <p style={{ fontSize: 13, fontWeight: 600, color: PALETTE.textLight,
-                textTransform: "uppercase", letterSpacing: ".08em", marginBottom: 4 }}>
-                Overview
-              </p>
               <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 32, color: PALETTE.textPrimary }}>
                 Dashboard
               </h2>
@@ -165,19 +233,31 @@ export default function Savoney() {
               background: PALETTE.surface, border: `1px solid ${PALETTE.border}`,
               borderRadius: 12, padding: "8px 16px",
             }}>
-              <span style={{ fontSize: 16 }}>📅</span>
+              <span style={{ fontSize: 16 }}>Date</span>
               <span style={{ fontSize: 13, fontWeight: 600, color: PALETTE.textMuted }}>{formattedDate}</span>
             </div>
           </div>
 
           <SummaryCards metrics={metrics} incomeList={incomeList} expenseList={expenseList} />
 
+          {(!isLoaded || isDashboardLoading) && (
+            <div className="svy-card" style={{ marginTop: 24, color: PALETTE.textMuted, fontWeight: 600 }}>
+              Loading your financial data...
+            </div>
+          )}
+
+          {dashboardError && (
+            <div className="svy-card" style={{ marginTop: 24, color: PALETTE.error, fontWeight: 700 }}>
+              {dashboardError}
+            </div>
+          )}
+
           <IncomeSection
             incomeList={incomeList}
-            incomeAmount={incomeAmount}   setIncomeAmount={setIncomeAmount}
-            incomeDate={incomeDate}       setIncomeDate={setIncomeDate}
+            incomeAmount={incomeAmount} setIncomeAmount={setIncomeAmount}
+            incomeDate={incomeDate} setIncomeDate={setIncomeDate}
             incomeRemarks={incomeRemarks} setIncomeRemarks={setIncomeRemarks}
-            incomeSource={incomeSource}   setIncomeSource={setIncomeSource}
+            incomeSource={incomeSource} setIncomeSource={setIncomeSource}
             handleAddIncome={handleAddIncome}
           />
 
@@ -185,7 +265,7 @@ export default function Savoney() {
             budgets={budgets}
             budgetList={budgetList}
             expenseList={expenseList}
-            budgetAmountInput={budgetAmountInput}     setBudgetAmountInput={setBudgetAmountInput}
+            budgetAmountInput={budgetAmountInput} setBudgetAmountInput={setBudgetAmountInput}
             budgetCategoryInput={budgetCategoryInput} setBudgetCategoryInput={setBudgetCategoryInput}
             handleCategoryBudget={handleCategoryBudget}
           />
@@ -194,11 +274,11 @@ export default function Savoney() {
             expenseList={expenseList}
             expenseOptions={expenseOptions}
             selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}
-            selectedDate={selectedDate}         setSelectedDate={setSelectedDate}
-            expenseAmountInput={expenseAmountInput}   setExpenseAmountInput={setExpenseAmountInput}
-            expenseDateInput={expenseDateInput}       setExpenseDateInput={setExpenseDateInput}
+            selectedDate={selectedDate} setSelectedDate={setSelectedDate}
+            expenseAmountInput={expenseAmountInput} setExpenseAmountInput={setExpenseAmountInput}
+            expenseDateInput={expenseDateInput} setExpenseDateInput={setExpenseDateInput}
             expenseRemarksInput={expenseRemarksInput} setExpenseRemarksInput={setExpenseRemarksInput}
-            expenseSourceInput={expenseSourceInput}   setExpenseSourceInput={setExpenseSourceInput}
+            expenseSourceInput={expenseSourceInput} setExpenseSourceInput={setExpenseSourceInput}
             handleAddExpense={handleAddExpense}
             totalExpense={metrics.expense}
           />

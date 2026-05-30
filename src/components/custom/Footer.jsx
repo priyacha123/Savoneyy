@@ -1,4 +1,5 @@
 import { PALETTE } from "../../../utility/tokens";
+import { Link } from "react-router-dom";
 
 
 export default function Footer() {
@@ -31,14 +32,14 @@ export default function Footer() {
                 { icon: "✉️", label: "Mail" },
                 { icon: "👥", label: "Community" },
               ].map(({ icon, label }) => (
-                <a key={label} href="#" aria-label={label} style={{
+                <Link key={label} to="#" aria-label={label} style={{
                   width: 36, height: 36, borderRadius: 10,
                   background: PALETTE.hero,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 16, textDecoration: "none",
                 }}>
                   {icon}
-                </a>
+                </Link>
               ))}
             </div>
           </div>
@@ -57,7 +58,7 @@ export default function Footer() {
               </p>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {links.map((l) => (
-                  <a key={l} href="#" className="svy-footer-link">{l}</a>
+                  <Link key={l} to="#" className="svy-footer-link">{l}</Link>
                 ))}
               </div>
             </div>
@@ -78,13 +79,13 @@ export default function Footer() {
               <p style={{ fontSize: 13, color: PALETTE.textMuted, marginBottom: 12 }}>
                 We'd love to hear your thoughts on this redesign!
               </p>
-              <a
-                href="mailto:support@savoney.com"
+              <Link
+                to="mailto:support@savoney.com"
                 className="svy-btn-primary"
                 style={{ textDecoration: "none", borderRadius: 10, padding: "10px 16px", fontSize: 13, display: "flex" }}
               >
                 Send Feedback →
-              </a>
+              </Link>
             </div>
           </div>
         </div>

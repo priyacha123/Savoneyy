@@ -1,136 +1,191 @@
-# Savoney — Personal Finance Tracker
+# Savoney
 
-A web-based personal finance tracker to log income, set budgets, track expenses, and monitor spending through a clean dashboard.
-
-Built as part of an individual assessment project.
-
----
+Savoney is a production-ready personal finance dashboard for authenticated users. It tracks income, expenses, budgets, dashboard metrics, filters, and Chart.js analytics with user-specific PostgreSQL persistence.
 
 ## Features
 
-- Sign up / Sign in with Clerk authentication
-- Protected dashboard — only accessible when logged in
-- Add, view, and delete income entries
-- Set budget limits per spending category
-- Log expenses and track against budgets with visual progress bars
-- Pie charts for income and expense breakdowns
-- Filter expenses by category and date
-- User data persisted in Neon PostgreSQL via Prisma
-- Auto user creation in database on first login
-- Fully responsive — mobile and desktop layouts
-- Scroll-triggered animations
-- Deployed on Vercel with SPA routing support
-
----
+- Clerk authentication with protected dashboard routes
+- Auto-creates or updates a database user from the Clerk profile
+- User-private income, expense, and budget data
+- Income history and pie chart grouped by source
+- Expense history, category/date filters, and pie chart grouped by category
+- Budget category creation, expense dropdown population, progress bars, and over-budget highlighting
+- PostgreSQL persistence through Prisma and Neon
+- Express API backend with validation and status-code based errors
+- Responsive dashboard layout and mobile slide-out sidebar
 
 ## Tech Stack
 
 | Layer | Tool |
-|---|---|
-| Frontend | React + Vite |
-| Styling | Tailwind CSS |
+| --- | --- |
+| Frontend | React, Vite |
+| Styling | Tailwind CSS, local component styles |
 | Auth | Clerk |
-| Routing | React Router DOM |
-| Database | Neon (Serverless PostgreSQL) |
+| Charts | Chart.js, react-chartjs-2 |
+| Backend | Express.js |
 | ORM | Prisma |
-| Charts | Chart.js |
-| Deployment | Vercel |
+| Database | Neon PostgreSQL |
+| Frontend Hosting | Vercel |
+| Backend Hosting | Render, Railway, or local Node |
 
----
+## Folder Structure
 
-## Project Structure
-
-```
+```txt
 src/
-├── components/
-│   ├── LandingPage.jsx
-│   ├── Login.jsx
-│   ├── Signup.jsx
-│   ├── ProtectedRoute.jsx
-│   └── Savoney.jsx
-├── App.jsx
-└── main.jsx
+  components/
+  lib/api.js
+  App.jsx
+  main.jsx
+server/
+  prisma/client.js
+  routes/
+    budget.js
+    expense.js
+    helpers.js
+    income.js
+    users.js
+  server.js
+prisma/
+  schema.prisma
 ```
 
----
+## Environment Variables
 
-## Getting Started
+Create `.env` in the project root for local development.
 
-### 1. Clone the repo
+```env
+VITE_CLERK_PUBLISHABLE_KEY=
+VITE_API_URL=
+DATABASE_URL=
+CLERK_SECRET_KEY=
+FRONTEND_URL=http://localhost:5173
+PORT=5000
+```
+
+Use `VITE_API_URL` only when the API is hosted on a different origin, for example `https://savoney-api.onrender.com`. During local Vite development, `/api` is proxied to `http://localhost:5000`.
+
+## Clerk Setup
+
+1. Create a Clerk application.
+2. Add `VITE_CLERK_PUBLISHABLE_KEY` to the frontend environment.
+3. Add `CLERK_SECRET_KEY` to the backend host environment.
+4. Configure Clerk sign-in and sign-up redirects to `/dashboard`.
+
+## Neon and Prisma Setup
+
+1. Create a Neon PostgreSQL project.
+2. Copy the pooled or direct connection string.
+3. Set `DATABASE_URL` in `.env`. Include `sslmode=require` when Neon requires it.
+4. Push the Prisma schema and generate the client:
 
 ```bash
-git clone https://github.com/your-username/savoney.git
-cd savoney
+npx prisma db push
+npx prisma generate
 ```
 
-### 2. Install dependencies
+## Local Development
+
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-### 3. Set up environment variables
-
-Create a `.env` file in the root:
-
-```env
-VITE_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-DATABASE_URL=your_neon_postgres_connection_string
-PORT=5000
-```
-
-> `DATABASE_URL` must be your Neon connection string with `?sslmode=require` appended.
-
-### 4. Set up the database
+Run the Express API:
 
 ```bash
-npx prisma generate
-npx prisma db push
+npm run dev:server
 ```
 
-### 5. Run the development server
+Run the Vite frontend in another terminal:
 
 ```bash
 npm run dev
 ```
 
----
+Open the Vite URL, usually `http://localhost:5173`.
 
-## Deployment (Vercel)
+## API Endpoints
 
-### Environment variables
+All endpoints return JSON.
 
-Add these in your Vercel project settings under **Environment Variables**:
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | `/api/health` | Backend health check |
+| POST | `/api/create-user` | Create or update a user by Clerk ID |
+| POST | `/api/income` | Create an income entry |
+| GET | `/api/income/:clerkId` | Get only that user's income entries |
+| POST | `/api/expense` | Create an expense entry |
+| GET | `/api/expense/:clerkId` | Get only that user's expenses |
+| POST | `/api/budget` | Create or update a budget category |
+| GET | `/api/budget/:clerkId` | Get only that user's budgets |
 
+### Request Examples
+
+```json
+{
+  "clerkId": "user_123",
+  "email": "person@example.com",
+  "fullName": "Person Example"
+}
 ```
-VITE_CLERK_PUBLISHABLE_KEY
-DATABASE_URL
+
+```json
+{
+  "clerkId": "user_123",
+  "amount": 2500,
+  "source": "Salary",
+  "remarks": "Monthly salary",
+  "date": "2026-05-30"
+}
 ```
 
----
+```json
+{
+  "clerkId": "user_123",
+  "type": "Food",
+  "amount": 10000
+}
+```
 
-## Authentication Flow
+## Deployment
 
-1. User signs up or logs in via Clerk
-2. Clerk manages the session
-3. On first login, user is created in the Neon database via `/api/create-user`
-4. `ProtectedRoute` checks authentication before rendering the dashboard
-5. Unauthenticated users are redirected to the login page
+### Backend on Render or Railway
 
----
+1. Create a Node service from this repository.
+2. Set the start command:
+
+```bash
+npm run server
+```
+
+3. Add environment variables:
+
+```env
+DATABASE_URL=
+CLERK_SECRET_KEY=
+FRONTEND_URL=https://your-vercel-app.vercel.app
+PORT=5000
+```
+
+4. Run `npx prisma db push` once against the production database.
+
+### Frontend on Vercel
+
+1. Import the repository into Vercel.
+2. Set the build command to `npm run build`.
+3. Set environment variables:
+
+```env
+VITE_CLERK_PUBLISHABLE_KEY=
+VITE_API_URL=https://your-backend-host.example.com
+```
+
+4. Deploy.
 
 ## Notes
 
-- Do not expose `.env` or any credentials publicly
-- Clerk publishable key must be prefixed with `VITE_` to be accessible in the frontend
-- Database schema changes should be pushed with `npx prisma db push`
-- The live deployment must remain accessible at the time of review
-
----
-
-## Live Demo
-
-[savoney.vercel.app](https://savoney.vercel.app)
-
----
-
+- Never hardcode Clerk or database secrets.
+- Every income, expense, and budget record is linked through the database user's Clerk ID.
+- Expense categories come from saved budget categories.
+- Filtering happens in React state after user-specific expenses are loaded from the API.

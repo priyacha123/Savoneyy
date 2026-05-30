@@ -1,122 +1,155 @@
+import { BarElement, CategoryScale, Chart as ChartJS, LinearScale, Tooltip } from "chart.js";
+import { Bar } from "react-chartjs-2";
 import { PALETTE, DONUT_STROKES, fmtINR } from "../../../utility/tokens";
 
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
-/* ── Donut chart (internal) ── */
-function ExpenseDonutChart({ expenseList, totalExpense }) {
-  const byCategory = {};
-  expenseList.forEach((item) => {
+function ExpensePieChart({ expenseList, totalExpense }) {
+  const byCategory = expenseList.reduce((acc, item) => {
     const cat = item.source || "Other";
-    byCategory[cat] = (byCategory[cat] || 0) + Number(item.amount);
-  });
-  const sorted = Object.keys(byCategory)
-    .map((cat) => ({ category: cat, amount: byCategory[cat] }))
+    acc[cat] = (acc[cat] || 0) + Number(item.amount);
+    return acc;
+  }, {});
+
+  const rows = Object.keys(byCategory)
+    .map((label, index) => ({
+      label,
+      amount: byCategory[label],
+      color: DONUT_STROKES[index % DONUT_STROKES.length],
+    }))
     .sort((a, b) => b.amount - a.amount);
 
-  const total = totalExpense || 1;
-  const R = 72, CX = 90, CY = 90;
-  const CIRC = 2 * Math.PI * R;
-
-  let acc = 0;
-  const segments = sorted.map((item, i) => {
-    const pct    = item.amount / total;
-    const dash   = pct * CIRC;
-    const offset = -(acc * CIRC);
-    acc += pct;
-    return { ...item, pct, dash, offset, color: DONUT_STROKES[i % DONUT_STROKES.length] };
-  });
-
-  const mockSegments = [
-    { category: "Food",     pct: .45, dash: .45 * CIRC, offset: 0,           color: "#4361EE" },
-    { category: "Auto",     pct: .30, dash: .30 * CIRC, offset: -.45 * CIRC, color: "#06C886" },
-    { category: "Shopping", pct: .25, dash: .25 * CIRC, offset: -.75 * CIRC, color: "#F97316" },
-  ];
-
-  const display   = expenseList.length === 0 ? mockSegments : segments;
-  const centerAmt = expenseList.length === 0 ? "32.4k" : `${(totalExpense / 1000).toFixed(1)}k`;
+  if (rows.length === 0) {
+    return (
+      <div style={{ minHeight: 240, display: "flex", alignItems: "center", justifyContent: "center", color: PALETTE.textMuted, fontWeight: 600 }}>
+        Add expenses to view spending mix.
+      </div>
+    );
+  }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <p className="svy-tag" style={{ alignSelf: "flex-start" }}>Spending Mix</p>
-
-      <div style={{ position: "relative", width: 180, height: 180 }}>
-        <svg width="180" height="180" style={{ transform: "rotate(-90deg)" }}>
-          <circle cx={CX} cy={CY} r={R} fill="none" stroke={PALETTE.hero} strokeWidth={18} />
-          {display.map((seg) => (
-            <circle
-              key={seg.category}
-              cx={CX} cy={CY} r={R}
-              fill="none"
-              stroke={seg.color}
-              strokeWidth={18}
-              strokeDasharray={`${seg.dash} ${CIRC}`}
-              strokeDashoffset={seg.offset}
-              strokeLinecap="round"
-              style={{ transition: "stroke-dashoffset .5s ease" }}
-            />
-          ))}
-        </svg>
-        <div style={{
-          position: "absolute", inset: 0,
-          display: "flex", flexDirection: "column",
-          alignItems: "center", justifyContent: "center",
-        }}>
-          <span style={{ fontSize: 11, fontWeight: 600, color: PALETTE.textLight, textTransform: "uppercase", letterSpacing: ".06em" }}>Total</span>
-          <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, color: PALETTE.textPrimary }}>₹{centerAmt}</span>
+    <div>
+      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 16, marginBottom: 18 }}>
+        <p className="svy-tag" style={{ marginBottom: 0 }}>Spending Mix</p>
+        <div style={{ textAlign: "right" }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: PALETTE.textLight, textTransform: "uppercase", letterSpacing: ".08em" }}>
+            Total Spend
+          </div>
+          <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: PALETTE.textPrimary }}>
+            Rs {fmtINR(totalExpense)}
+          </div>
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 20px", marginTop: 24, width: "100%" }}>
-        {display.map((seg) => (
-          <div key={seg.category} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div style={{ width: 10, height: 10, borderRadius: "50%", background: seg.color, flexShrink: 0 }} />
-            <span style={{ fontSize: 13, color: PALETTE.textMuted, fontWeight: 600 }}>
-              {seg.category} ({(seg.pct * 100).toFixed(0)}%)
-            </span>
-          </div>
-        ))}
+      <div style={{ height: 260, width: "100%" }}>
+        <Bar
+          data={{
+            labels: rows.map((row) => row.label),
+            datasets: [{
+              label: "Expense",
+              data: rows.map((row) => row.amount),
+              backgroundColor: rows.map((row) => row.color),
+              borderRadius: 10,
+              borderSkipped: false,
+              barPercentage: 0.58,
+              categoryPercentage: 0.7,
+            }],
+          }}
+          options={{
+            indexAxis: "y",
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                beginAtZero: true,
+                border: { display: false },
+                grid: { color: PALETTE.border },
+                ticks: {
+                  color: PALETTE.textLight,
+                  maxTicksLimit: 4,
+                  callback: (value) => `Rs ${fmtINR(value)}`,
+                },
+              },
+              y: {
+                border: { display: false },
+                grid: { display: false },
+                ticks: {
+                  color: PALETTE.textMuted,
+                  font: { weight: 700 },
+                },
+              },
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: PALETTE.textPrimary,
+                padding: 12,
+                displayColors: false,
+                callbacks: {
+                  label: (context) => {
+                    const pct = totalExpense ? ((context.parsed.x / totalExpense) * 100).toFixed(0) : 0;
+                    return `Rs ${fmtINR(context.parsed.x)} (${pct}%)`;
+                  },
+                },
+              },
+            },
+          }}
+        />
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 12, marginTop: 18 }}>
+        {rows.map((row) => {
+          const pct = totalExpense ? Math.round((row.amount / totalExpense) * 100) : 0;
+          return (
+            <div key={row.label} style={{ border: `1px solid ${PALETTE.border}`, borderRadius: 12, padding: "10px 12px", background: PALETTE.bg }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                <span style={{ width: 9, height: 9, borderRadius: 999, background: row.color, flexShrink: 0 }} />
+                <span style={{ fontSize: 13, fontWeight: 800, color: PALETTE.textPrimary, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {row.label}
+                </span>
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", gap: 10, fontSize: 12, color: PALETTE.textMuted, fontWeight: 700 }}>
+                <span>Rs {fmtINR(row.amount)}</span>
+                <span>{pct}%</span>
+              </div>
+              <div style={{ height: 5, background: PALETTE.border, borderRadius: 99, overflow: "hidden", marginTop: 8 }}>
+                <div style={{ width: `${pct}%`, height: "100%", background: row.color, borderRadius: 99 }} />
+                </div>
+              </div>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-/* ── Main export ── */
 export default function ExpenseSection({
   expenseList,
   expenseOptions,
   selectedCategory, setSelectedCategory,
-  selectedDate,     setSelectedDate,
-  expenseAmountInput,   setExpenseAmountInput,
-  expenseDateInput,     setExpenseDateInput,
-  expenseRemarksInput,  setExpenseRemarksInput,
-  expenseSourceInput,   setExpenseSourceInput,
+  selectedDate, setSelectedDate,
+  expenseAmountInput, setExpenseAmountInput,
+  expenseDateInput, setExpenseDateInput,
+  expenseRemarksInput, setExpenseRemarksInput,
+  expenseSourceInput, setExpenseSourceInput,
   handleAddExpense,
   totalExpense,
 }) {
-  const mockHistory = [
-    { remarks: "Starbucks Coffee", source: "Food",      amount: 450,  date: "Oct 24" },
-    { remarks: "Petrol Refill",     source: "Transport", amount: 2000, date: "Oct 23" },
-    { remarks: "Weekly Groceries",  source: "Shopping",  amount: 5600, date: "Oct 22" },
-  ];
-
   const filteredLive = [...expenseList]
     .filter((item) => {
-      const catMatch  = selectedCategory === "all" || item.source === selectedCategory;
+      const catMatch = selectedCategory === "all" || item.source === selectedCategory;
       const dateMatch = !selectedDate || item.date === selectedDate;
       return catMatch && dateMatch;
     })
-    .reverse();
-
-  const displayHistory = expenseList.length === 0 ? mockHistory : filteredLive;
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   return (
     <section id="expense" style={{ marginTop: 64 }}>
-      {/* Section heading */}
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 28 }}>
-        <span style={{ fontSize: 22 }}>🧾</span>
+        <span style={{ fontSize: 22 }}>Expense</span>
         <h3 className="svy-section-title">Expense Tracking</h3>
       </div>
 
-      {/* ── Filter bar ── */}
       <div className="svy-filter-bar" style={{ marginBottom: 24 }}>
         <span style={{ fontSize: 13, fontWeight: 700, color: PALETTE.textMuted, whiteSpace: "nowrap" }}>Filter:</span>
         <select
@@ -143,18 +176,16 @@ export default function ExpenseSection({
             cursor: "pointer", fontFamily: "'DM Sans', sans-serif", whiteSpace: "nowrap",
           }}
         >
-          ✕ Clear
+          Clear
         </button>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
-
-        {/* ── Form ── */}
         <div className="svy-card" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <p className="svy-tag">Log New Expense</p>
 
           <div>
-            <label className="svy-label">Amount (₹)</label>
+            <label className="svy-label">Amount (Rs)</label>
             <input className="svy-input" type="number" value={expenseAmountInput}
               onChange={(e) => setExpenseAmountInput(e.target.value)} placeholder="0.00" />
           </div>
@@ -184,12 +215,13 @@ export default function ExpenseSection({
           </button>
         </div>
 
-        {/* ── History ── */}
         <div className="svy-card">
           <p className="svy-tag">Expense Stream</p>
           <div className="svy-scroll" style={{ overflowY: "auto", maxHeight: 360 }}>
-            {displayHistory.map((item, idx) => (
-              <div key={idx} className="svy-row">
+            {filteredLive.length === 0 ? (
+              <p style={{ color: PALETTE.textMuted, fontWeight: 600 }}>No expenses match your filters.</p>
+            ) : filteredLive.map((item, idx) => (
+              <div key={item.id} className="svy-row">
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <div style={{
                     width: 10, height: 10, borderRadius: "50%",
@@ -199,21 +231,20 @@ export default function ExpenseSection({
                   <div>
                     <p style={{ fontWeight: 600, fontSize: 14, color: PALETTE.textPrimary }}>{item.remarks}</p>
                     <span style={{ fontSize: 12, color: PALETTE.textLight }}>
-                      {item.date} · {item.source}
+                      {item.date} - {item.source}
                     </span>
                   </div>
                 </div>
                 <span style={{ fontWeight: 700, fontSize: 15, color: PALETTE.textPrimary }}>
-                  ₹{fmtINR(item.amount)}
+                  Rs {fmtINR(item.amount)}
                 </span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* ── Donut chart ── */}
         <div className="svy-card">
-          <ExpenseDonutChart expenseList={expenseList} totalExpense={totalExpense} />
+          <ExpensePieChart expenseList={expenseList} totalExpense={totalExpense} />
         </div>
       </div>
     </section>

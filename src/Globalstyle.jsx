@@ -91,9 +91,49 @@ export default function GlobalStyle() {
         transition: color .15s;
       }
       .svy-nav-link:hover, .svy-nav-link.active { color: ${PALETTE.primary}; }
+      .svy-menu-button {
+        width: 38px;
+        height: 38px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: ${PALETTE.surface};
+        border: 1px solid ${PALETTE.border};
+        border-radius: 10px;
+        color: ${PALETTE.textPrimary};
+        cursor: pointer;
+      }
+      .svy-sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(25,27,35,.32);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity .2s ease;
+      }
+      .svy-sidebar-backdrop.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .svy-sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: min(320px, 86vw);
+        height: 100vh;
+        background: ${PALETTE.surface};
+        border-left: 1px solid ${PALETTE.border};
+        padding: 22px;
+        transform: translateX(100%);
+        transition: transform .24s ease;
+        box-shadow: -20px 0 60px rgba(25,27,35,.12);
+      }
+      .svy-sidebar.open { transform: translateX(0); }
       @media (max-width: 768px) {
         .svy-nav { padding: 0 20px; }
-        .svy-nav-links { display: none; }
+        .svy-nav-links { display: none !important; }
+        .svy-menu-button { display: inline-flex; }
+        .svy-nav-date { display: none; }
       }
 
       /* ── history row ── */
