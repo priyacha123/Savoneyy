@@ -29,7 +29,7 @@ export default function SummaryCards({ metrics, incomeList, expenseList }) {
   ];
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))", gap: 20, minWidth: 0 }}>
       {cards.map(({ label, value, variant, icon, badge }) => (
         <div
           key={label}

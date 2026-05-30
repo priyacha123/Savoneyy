@@ -1,5 +1,6 @@
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import HeroSection from "./custom/HeroSection";
 import GlobalStyle from "../Globalstyle";
@@ -23,12 +24,25 @@ const ChartIcon = () => (
   </svg>
 );
 
-const WalletNavIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-    <rect x="2" y="6" width="20" height="14" rx="3" fill="#DBEAFE" stroke="#2E86FF" strokeWidth="1.8" />
-    <path d="M2 10h20" stroke="#2E86FF" strokeWidth="1.5" />
-    <circle cx="17" cy="15" r="2" fill="#2E86FF" />
-  </svg>
+const SavoneyLogo = () => (
+  <>
+    <div style={{
+      width: 36,
+      height: 36,
+      borderRadius: 10,
+      background: "#4361EE",
+      color: "#fff",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: 15,
+      fontWeight: 800,
+      fontFamily: "'DM Sans', sans-serif",
+    }}>
+      S
+    </div>
+    <span style={S.logoText}>Savoney</span>
+  </>
 );
 
 const FacebookIcon = () => (
@@ -62,6 +76,7 @@ const S = {
     minHeight: "100vh",
     color: "#1E3A5F",
     overflowX: "hidden",
+    maxWidth: "100%",
   },
 
   // Navbar
@@ -83,15 +98,15 @@ const S = {
   navLogo: {
     display: "flex",
     alignItems: "center",
-    gap: 9,
+    gap: 10,
     textDecoration: "none",
   },
   logoText: {
-    fontFamily: "'Plus Jakarta Sans', sans-serif",
-    fontWeight: 800,
+    fontFamily: "'DM Serif Display', serif",
+    fontWeight: 400,
     fontSize: 22,
-    color: "#1D4ED8",
-    letterSpacing: "-0.5px",
+    color: "#191B23",
+    letterSpacing: 0,
   },
   navLinks: {
     display: "flex",
@@ -139,7 +154,7 @@ const S = {
   hero: {
     padding: "80px 48px 60px",
     display: "grid",
-    gridTemplateColumns: "1fr 1fr",
+    gridTemplateColumns: "repeat(auto-fit, minmax(min(320px, 100%), 1fr))",
     gap: 40,
     alignItems: "center",
     maxWidth: 1100,
@@ -230,6 +245,7 @@ const S = {
   },
   statsInner: {
     display: "flex",
+    flexWrap: "wrap",
     justifyContent: "center",
     gap: 0,
     maxWidth: 800,
@@ -255,10 +271,11 @@ const S = {
     padding: "80px 48px",
     maxWidth: 1100,
     margin: "0 auto",
+    scrollMarginTop: 88,
   },
   featuresGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
+    gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))",
     gap: 24,
     marginTop: 48,
   },
@@ -297,11 +314,12 @@ const S = {
     borderTop: "1px solid rgba(147,197,253,0.3)",
     borderBottom: "1px solid rgba(147,197,253,0.3)",
     padding: "80px 48px",
+    scrollMarginTop: 88,
   },
   howInner: { maxWidth: 1100, margin: "0 auto" },
   stepsGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(6, 1fr)",
+    gridTemplateColumns: "repeat(auto-fit, minmax(min(130px, 100%), 1fr))",
     gap: 32,
     marginTop: 52,
     position: "relative",
@@ -347,7 +365,7 @@ const S = {
   },
   testiGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
+    gridTemplateColumns: "repeat(auto-fit, minmax(min(240px, 100%), 1fr))",
     gap: 24,
     marginTop: 48,
   },
@@ -371,14 +389,15 @@ const S = {
 
   // CTA
   ctaSection: {
-    margin: "0 48px 80px",
+    margin: "0 min(48px, 5vw) 80px",
     background: "linear-gradient(135deg, #2E86FF 0%, #1D4ED8 100%)",
     borderRadius: 28,
-    padding: "72px 60px",
+    padding: "72px min(60px, 7vw)",
     textAlign: "center",
     position: "relative",
     overflow: "hidden",
     boxShadow: "0 24px 60px rgba(46,134,255,0.3)",
+    scrollMarginTop: 88,
   },
   ctaH2: {
     fontFamily: "'Plus Jakarta Sans', sans-serif",
@@ -429,7 +448,7 @@ const S = {
   },
   footerTop: {
     display: "grid",
-    gridTemplateColumns: "2fr 1fr 1fr 1fr",
+    gridTemplateColumns: "repeat(auto-fit, minmax(min(180px, 100%), 1fr))",
     gap: 48,
     marginBottom: 48,
     maxWidth: 1100,
@@ -447,12 +466,13 @@ const S = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    flexWrap: "wrap",
     paddingTop: 24,
     borderTop: "1px solid rgba(147,197,253,0.25)",
     maxWidth: 1100,
     margin: "0 auto",
   },
-  footerLinks: { display: "flex", gap: 24, listStyle: "none", padding: 0, margin: 0 },
+  footerLinks: { display: "flex", flexWrap: "wrap", gap: 24, listStyle: "none", padding: 0, margin: 0 },
   footerLink: { textDecoration: "none", fontSize: 13.5, color: "#93C5FD", transition: "color .2s" },
   socials: { display: "flex", gap: 12, alignItems: "center" },
   socialBtn: {
@@ -551,6 +571,12 @@ const steps = [
   { n: 6, title: "View your reports", desc: "View your reports" },
 ];
 
+const navItems = [
+  { label: "Features", id: "features" },
+  { label: "How It Works", id: "how" },
+  { label: "Get Started", id: "start" },
+];
+
 /* ── Main Component ── */
 export default function SavoneyLanding() {
   const [hovered, setHovered] = useState(null);
@@ -558,11 +584,37 @@ export default function SavoneyLanding() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
 
+  const scrollToSection = (id) => (event) => {
+    event.preventDefault();
+    const section = document.getElementById(id);
+    if (!section) return;
+
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.history.replaceState(null, "", `/#${id}`);
+    setMobileOpen(false);
+  };
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    const sectionId = window.location.hash.replace("#", "");
+    if (!sectionId) return;
+
+    window.requestAnimationFrame(() => {
+      document.getElementById(sectionId)?.scrollIntoView({ block: "start" });
+    });
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
 
   return (
     <>
@@ -576,30 +628,30 @@ export default function SavoneyLanding() {
           boxShadow: scrolled ? "0 4px 24px rgba(96,165,250,0.12)" : "none",
           transition: "box-shadow .3s",
         }}>
-          <Link to="#" style={S.navLogo}>
-            <WalletNavIcon />
-            <span style={S.logoText}>Savoney</span>
+          <Link to="/" style={S.navLogo}>
+            <SavoneyLogo />
           </Link>
 
-          <ul style={S.navLinks}>
-            {["Features", "Pricing", "About", "Blog"].map((l) => (
-              <li key={l}>
+          <ul className="landing-desktop-links" style={S.navLinks}>
+            {navItems.map((item) => (
+              <li key={item.id}>
                 <Link
-                  to="#"
+                  to={`/#${item.id}`}
                   style={{
                     ...S.navLink,
-                    color: hovered === `nav-${l}` ? "#1D4ED8" : "#4B7FCC",
+                    color: hovered === `nav-${item.id}` ? "#1D4ED8" : "#4B7FCC",
                   }}
-                  onMouseEnter={() => setHovered(`nav-${l}`)}
+                  onClick={scrollToSection(item.id)}
+                  onMouseEnter={() => setHovered(`nav-${item.id}`)}
                   onMouseLeave={() => setHovered(null)}
                 >
-                  {l}
+                  {item.label}
                 </Link>
               </li>
             ))}
           </ul>
 
-          <div style={S.navRight}>
+          <div className="landing-desktop-auth" style={S.navRight}>
             
 <SignedOut>
   <SignInButton mode="modal" asChild>
@@ -624,20 +676,62 @@ export default function SavoneyLanding() {
           {/* Hamburger */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
+            className="landing-menu-button"
+            aria-label="Open menu"
             style={{
-              display: "none",
               background: "none",
               border: "none",
               cursor: "pointer",
               padding: 4,
-              "@media (max-width: 768px)": { display: "block" },
             }}
           >
-            <div style={{ width: 22, height: 2, background: "#2E86FF", marginBottom: 5, borderRadius: 2 }} />
-            <div style={{ width: 22, height: 2, background: "#2E86FF", marginBottom: 5, borderRadius: 2 }} />
-            <div style={{ width: 22, height: 2, background: "#2E86FF", borderRadius: 2 }} />
+            <Menu size={22} />
           </button>
         </nav>
+        <div className={`svy-sidebar-backdrop ${mobileOpen ? "open" : ""}`} />
+        <aside
+          className={`svy-sidebar landing-mobile-sidebar ${mobileOpen ? "open" : ""}`}
+          aria-hidden={!mobileOpen}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28 }}>
+            <Link to="/" style={S.navLogo} onClick={() => setMobileOpen(false)}>
+              <SavoneyLogo />
+            </Link>
+            <button className="svy-menu-button" onClick={() => setMobileOpen(false)} aria-label="Close menu">
+              <X size={20} />
+            </button>
+          </div>
+          <nav style={{ display: "grid", gap: 18, marginBottom: 28 }}>
+            {navItems.map((item) => (
+              <Link
+                key={item.id}
+                to={`/#${item.id}`}
+                className="svy-nav-link"
+                onClick={scrollToSection(item.id)}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <SignedOut>
+            <SignInButton mode="modal" asChild>
+              <button style={{ ...S.btnLogin, width: "100%" }} onClick={() => setMobileOpen(false)}>
+                Log In
+              </button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <button
+              style={{ ...S.btnGetStarted, width: "100%" }}
+              onClick={() => {
+                setMobileOpen(false);
+                navigate("/dashboard");
+              }}
+            >
+              Dashboard
+            </button>
+          </SignedIn>
+        </aside>
       <HeroSection />
 
         {/* ── FEATURES ── */}
@@ -690,7 +784,7 @@ export default function SavoneyLanding() {
         </section>
 
         {/* ── CTA SECTION ── */}
-        <section style={S.ctaSection}>
+        <section style={S.ctaSection} id="start">
           <div style={S.ctaDeco1} />
           <div style={S.ctaDeco2} />
           <h2 style={S.ctaH2}>Start saving smarter today</h2>
@@ -733,9 +827,8 @@ export default function SavoneyLanding() {
         <footer style={S.footer}>
           <div style={S.footerTop}>
             <div>
-              <Link to="#" style={S.navLogo}>
-                <WalletNavIcon />
-                <span style={S.logoText}>Savoney</span>
+              <Link to="/" style={S.navLogo}>
+                <SavoneyLogo />
               </Link>
               <p style={S.footerBrandDesc}>
                 The smartest way to track income, manage expenses, and grow your savings — effortlessly.

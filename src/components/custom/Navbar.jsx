@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, RefreshCw, X } from "lucide-react";
 import { UserButton } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
@@ -8,7 +8,6 @@ const NAV_ITEMS = ["#dashboard", "#income", "#budget", "#expense"];
 
 export default function Navbar({ formattedDate, resetData }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const panelRef = useRef(null);
 
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? "hidden" : "";
@@ -17,25 +16,22 @@ export default function Navbar({ formattedDate, resetData }) {
     };
   }, [isMenuOpen]);
 
-  useEffect(() => {
-    if (!isMenuOpen) return undefined;
+  const scrollToSection = (href) => (event) => {
+    event.preventDefault();
+    const section = document.querySelector(href);
+    if (!section) return;
 
-    function handlePointerDown(event) {
-      if (panelRef.current && !panelRef.current.contains(event.target)) {
-        setIsMenuOpen(false);
-      }
-    }
-
-    document.addEventListener("pointerdown", handlePointerDown);
-    return () => document.removeEventListener("pointerdown", handlePointerDown);
-  }, [isMenuOpen]);
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.history.replaceState(null, "", href);
+    setIsMenuOpen(false);
+  };
 
   const renderLink = (href) => (
     <Link
       key={href}
       to={href}
       className="svy-nav-link"
-      onClick={() => setIsMenuOpen(false)}
+      onClick={scrollToSection(href)}
     >
       {href.slice(1).charAt(0).toUpperCase() + href.slice(2)}
     </Link>
@@ -43,7 +39,11 @@ export default function Navbar({ formattedDate, resetData }) {
 
   return (
     <header className="svy-nav">
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <Link
+        to="/"
+        className="svy-brand-link"
+        onClick={() => setIsMenuOpen(false)}
+      >
         <div style={{
           width: 36, height: 36, borderRadius: 10,
           background: PALETTE.primary, color: "#fff",
@@ -57,7 +57,7 @@ export default function Navbar({ formattedDate, resetData }) {
         }}>
           Savoney
         </span>
-      </div>
+      </Link>
 
       <nav className="svy-nav-links" style={{ display: "flex", gap: 32 }}>
         {NAV_ITEMS.map(renderLink)}
@@ -95,11 +95,24 @@ export default function Navbar({ formattedDate, resetData }) {
       </div>
 
       <div className={`svy-sidebar-backdrop ${isMenuOpen ? "open" : ""}`} />
-      <aside ref={panelRef} className={`svy-sidebar ${isMenuOpen ? "open" : ""}`} aria-hidden={!isMenuOpen}>
+      <aside className={`svy-sidebar ${isMenuOpen ? "open" : ""}`} aria-hidden={!isMenuOpen}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28 }}>
-          <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, color: PALETTE.textPrimary }}>
+          <Link
+            to="/"
+            className="svy-brand-link"
+            onClick={() => setIsMenuOpen(false)}
+            style={{ gap: 8 }}
+          >
+            <div style={{
+              width: 34, height: 34, borderRadius: 10,
+              background: PALETTE.primary, color: "#fff",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 14, fontWeight: 800,
+            }}>S</div>
+            <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, color: PALETTE.textPrimary }}>
             Savoney
-          </span>
+            </span>
+          </Link>
           <button className="svy-menu-button" onClick={() => setIsMenuOpen(false)} aria-label="Close menu">
             <X size={20} />
           </button>

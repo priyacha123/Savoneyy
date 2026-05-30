@@ -97,7 +97,7 @@ function ExpensePieChart({ expenseList, totalExpense }) {
         />
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 12, marginTop: 18 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(120px, 100%), 1fr))", gap: 12, marginTop: 18, minWidth: 0 }}>
         {rows.map((row) => {
           const pct = totalExpense ? Math.round((row.amount / totalExpense) * 100) : 0;
           return (
@@ -179,7 +179,7 @@ export default function ExpenseSection({
         </button>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))", gap: 20, minWidth: 0 }}>
         <div className="svy-card" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <p className="svy-tag">Log New Expense</p>
 
@@ -221,20 +221,23 @@ export default function ExpenseSection({
               <p style={{ color: PALETTE.textMuted, fontWeight: 600 }}>No expenses match your filters.</p>
             ) : filteredLive.map((item, idx) => (
               <div key={item.id} className="svy-row">
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0, paddingRight: 12 }}>
                   <div style={{
                     width: 10, height: 10, borderRadius: "50%",
                     background: DONUT_STROKES[idx % DONUT_STROKES.length],
                     flexShrink: 0,
                   }} />
-                  <div>
-                    <p style={{ fontWeight: 600, fontSize: 14, color: PALETTE.textPrimary }}>{item.remarks}</p>
-                    <span style={{ fontSize: 12, color: PALETTE.textLight }}>
-                      {item.date} - {item.source}
-                    </span>
+                  <div style={{ minWidth: 0 }}>
+                    <p style={{ fontWeight: 600, fontSize: 14, color: PALETTE.textPrimary, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      {item.remarks || "Expense entry"}
+                    </p>
+                    <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 10, marginTop: 8 }}>
+                      <span className="svy-pill">{item.source}</span>
+                      <span style={{ fontSize: 12, color: PALETTE.textLight }}>{item.date}</span>
+                    </div>
                   </div>
                 </div>
-                <span style={{ fontWeight: 700, fontSize: 15, color: PALETTE.textPrimary }}>
+                <span style={{ fontWeight: 700, fontSize: 15, color: PALETTE.textPrimary, whiteSpace: "nowrap", flexShrink: 0 }}>
                   Rs {fmtINR(item.amount)}
                 </span>
               </div>

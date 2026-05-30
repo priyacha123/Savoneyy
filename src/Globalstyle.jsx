@@ -7,6 +7,14 @@ export default function GlobalStyle() {
 
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+      html,
+      body,
+      #root {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
       body {
         font-family: 'DM Sans', sans-serif;
         background: ${PALETTE.bg};
@@ -15,7 +23,21 @@ export default function GlobalStyle() {
       }
 
       /* ── scrollbar ── */
-      .svy-scroll::-webkit-scrollbar { width: 4px; }
+      .svy-scroll {
+        overscroll-behavior: contain;
+        padding-right: 2px;
+        scrollbar-width: none;
+      }
+      .svy-scroll:hover,
+      .svy-scroll:focus-within,
+      .svy-scroll:active {
+        scrollbar-width: thin;
+        scrollbar-color: ${PALETTE.border} transparent;
+      }
+      .svy-scroll::-webkit-scrollbar { width: 0; height: 0; }
+      .svy-scroll:hover::-webkit-scrollbar,
+      .svy-scroll:focus-within::-webkit-scrollbar,
+      .svy-scroll:active::-webkit-scrollbar { width: 5px; height: 5px; }
       .svy-scroll::-webkit-scrollbar-track { background: transparent; }
       .svy-scroll::-webkit-scrollbar-thumb { background: ${PALETTE.border}; border-radius: 9px; }
 
@@ -25,6 +47,7 @@ export default function GlobalStyle() {
         border: 1px solid ${PALETTE.border};
         border-radius: 20px;
         padding: 28px;
+        min-width: 0;
       }
 
       /* ── inputs ── */
@@ -60,6 +83,43 @@ export default function GlobalStyle() {
         font-size: 22px;
         color: ${PALETTE.textPrimary};
       }
+      .svy-main {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 60px 32px 80px;
+      }
+      .svy-dashboard-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 36px;
+      }
+      .svy-dashboard-title {
+        font-family: 'DM Serif Display', serif;
+        font-size: 32px;
+        color: ${PALETTE.textPrimary};
+      }
+      .svy-date-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: ${PALETTE.surface};
+        border: 1px solid ${PALETTE.border};
+        border-radius: 12px;
+        padding: 8px 16px;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+      .svy-date-chip span:first-child {
+        font-size: 14px;
+        color: ${PALETTE.textPrimary};
+      }
+      .svy-date-chip span:last-child {
+        font-size: 13px;
+        font-weight: 600;
+        color: ${PALETTE.textMuted};
+      }
       .svy-tag {
         font-size: 11px;
         font-weight: 700;
@@ -90,7 +150,20 @@ export default function GlobalStyle() {
         text-decoration: none;
         transition: color .15s;
       }
+      .svy-brand-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: inherit;
+        text-decoration: none;
+      }
       .svy-nav-link:hover, .svy-nav-link.active { color: ${PALETTE.primary}; }
+      .landing-menu-button {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        color: ${PALETTE.primary};
+      }
       .svy-menu-button {
         width: 38px;
         height: 38px;
@@ -106,6 +179,7 @@ export default function GlobalStyle() {
       .svy-sidebar-backdrop {
         position: fixed;
         inset: 0;
+        z-index: 60;
         background: rgba(25,27,35,.32);
         opacity: 0;
         pointer-events: none;
@@ -113,12 +187,13 @@ export default function GlobalStyle() {
       }
       .svy-sidebar-backdrop.open {
         opacity: 1;
-        pointer-events: auto;
+        pointer-events: none;
       }
       .svy-sidebar {
         position: fixed;
         top: 0;
         right: 0;
+        z-index: 70;
         width: min(320px, 86vw);
         height: 100vh;
         background: ${PALETTE.surface};
@@ -129,11 +204,73 @@ export default function GlobalStyle() {
         box-shadow: -20px 0 60px rgba(25,27,35,.12);
       }
       .svy-sidebar.open { transform: translateX(0); }
+      #dashboard,
+      #income,
+      #budget,
+      #expense {
+        scroll-margin-top: 88px;
+      }
       @media (max-width: 768px) {
         .svy-nav { padding: 0 20px; }
         .svy-nav-links { display: none !important; }
         .svy-menu-button { display: inline-flex; }
         .svy-nav-date { display: none; }
+        .landing-desktop-links,
+        .landing-desktop-auth {
+          display: none !important;
+        }
+        .landing-menu-button {
+          display: inline-flex !important;
+        }
+        .landing-mobile-sidebar .svy-menu-button {
+          display: inline-flex;
+        }
+        .svy-main {
+          padding: 36px 18px 64px;
+        }
+        .svy-dashboard-header {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 12px;
+          margin-bottom: 28px;
+        }
+        .svy-dashboard-title {
+          font-size: 28px;
+          line-height: 1;
+        }
+        .svy-date-chip {
+          width: fit-content;
+          max-width: 100%;
+          justify-content: flex-start;
+          padding: 10px 14px;
+        }
+      }
+      @media (max-width: 480px) {
+        .svy-card {
+          padding: 22px;
+        }
+        .svy-filter-bar {
+          display: grid;
+          grid-template-columns: 1fr;
+          align-items: stretch;
+          padding: 14px;
+        }
+        .svy-filter-bar .svy-input {
+          width: 100% !important;
+          max-width: none !important;
+        }
+        .svy-filter-bar button {
+          width: fit-content;
+        }
+      }
+      @media (max-width: 360px) {
+        .svy-main {
+          padding-left: 14px;
+          padding-right: 14px;
+        }
+        .svy-card {
+          padding: 18px;
+        }
       }
 
       /* ── history row ── */
@@ -141,7 +278,8 @@ export default function GlobalStyle() {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 14px 0;
+        gap: 16px;
+        padding: 18px 0;
         border-bottom: 1px solid ${PALETTE.border};
       }
       .svy-row:last-child { border-bottom: none; }
@@ -155,6 +293,7 @@ export default function GlobalStyle() {
         border-radius: 20px;
         background: ${PALETTE.hero};
         color: ${PALETTE.primary};
+        white-space: nowrap;
       }
 
       /* ── progress bar ── */
@@ -287,6 +426,27 @@ export default function GlobalStyle() {
         flex-wrap: wrap;
         align-items: center;
         gap: 12px;
+        min-width: 0;
+        max-width: 100%;
+        overflow: hidden;
+      }
+      .svy-filter-bar .svy-input {
+        min-width: 0 !important;
+      }
+
+      img,
+      svg,
+      canvas,
+      video {
+        max-width: 100%;
+      }
+
+      .svy-main > *,
+      .svy-card,
+      .svy-budget-card,
+      .svy-filter-bar {
+        min-width: 0;
+        max-width: 100%;
       }
 
       /* ── charts ── */

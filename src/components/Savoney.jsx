@@ -218,23 +218,16 @@ export default function Savoney() {
         <Navbar formattedDate={formattedDate} resetData={resetData} />
         {/* <HeroSection /> */}
 
-        <main style={{ maxWidth: 1280, margin: "0 auto", padding: "60px 32px 80px" }}>
-          <div id="dashboard" style={{
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            marginBottom: 36,
-          }}>
+        <main className="svy-main">
+          <div id="dashboard" className="svy-dashboard-header">
             <div>
-              <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 32, color: PALETTE.textPrimary }}>
+              <h2 className="svy-dashboard-title">
                 Dashboard
               </h2>
             </div>
-            <div style={{
-              display: "flex", alignItems: "center", gap: 8,
-              background: PALETTE.surface, border: `1px solid ${PALETTE.border}`,
-              borderRadius: 12, padding: "8px 16px",
-            }}>
-              <span style={{ fontSize: 16 }}>Date</span>
-              <span style={{ fontSize: 13, fontWeight: 600, color: PALETTE.textMuted }}>{formattedDate}</span>
+            <div className="svy-date-chip">
+              <span>Date</span>
+              <span>{formattedDate}</span>
             </div>
           </div>
 

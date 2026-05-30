@@ -17,7 +17,7 @@ export default function BudgetSection({
         <h3 className="svy-section-title">Budgeting Control</h3>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))", gap: 20, minWidth: 0 }}>
         <div className="svy-card">
           <p className="svy-tag">Set Category Limits</p>
 
@@ -75,7 +75,7 @@ export default function BudgetSection({
           </div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 16, alignContent: "start" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(150px, 100%), 1fr))", gap: 16, alignContent: "start", minWidth: 0 }}>
           {!hasData ? (
             <div className="svy-budget-card" style={{ gridColumn: "1 / -1", color: PALETTE.textMuted, fontWeight: 600 }}>
               Budget cards appear here once you add categories.

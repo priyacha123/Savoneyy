@@ -39,8 +39,8 @@ function IncomePieChart({ incomeList }) {
   return (
     <div>
       <p className="svy-tag">Distribution</p>
-      <div style={{ display: "grid", gap: 18 }}>
-        <div style={{ height: 240 }}>
+      <div style={{ display: "grid", gap: 24 }}>
+        <div style={{ height: 280, minWidth: 0 }}>
           <Line
             data={{
               labels: timeline.map((row) => row.date),
@@ -62,12 +62,17 @@ function IncomePieChart({ incomeList }) {
             options={{
               responsive: true,
               maintainAspectRatio: false,
+              layout: {
+                padding: { top: 10, right: 8, bottom: 4, left: 4 },
+              },
               scales: {
                 x: {
                   grid: { display: false },
                   ticks: {
                     color: PALETTE.textMuted,
                     font: { weight: 700 },
+                    autoSkip: true,
+                    maxTicksLimit: 3,
                     maxRotation: 0,
                   },
                 },
@@ -77,6 +82,7 @@ function IncomePieChart({ incomeList }) {
                   grid: { color: PALETTE.border },
                   ticks: {
                     color: PALETTE.textLight,
+                    maxTicksLimit: 6,
                     callback: (value) => `Rs ${fmtINR(value)}`,
                   },
                 },
@@ -96,7 +102,7 @@ function IncomePieChart({ incomeList }) {
           />
         </div>
 
-        <div style={{ display: "grid", gap: 10 }}>
+        <div style={{ display: "grid", gap: 14, borderTop: `1px solid ${PALETTE.border}`, paddingTop: 18 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 12 }}>
             <span style={{ fontSize: 12, fontWeight: 700, color: PALETTE.textLight, textTransform: "uppercase" }}>
               Total Income
@@ -148,7 +154,7 @@ export default function IncomeSection({
         <h3 className="svy-section-title">Income Insights</h3>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(280px, 100%), 1fr))", gap: 20, minWidth: 0 }}>
         <div className="svy-card" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <p className="svy-tag">Add New Income</p>
 
@@ -194,14 +200,16 @@ export default function IncomeSection({
               <p style={{ color: PALETTE.textMuted, fontWeight: 600 }}>No income entries yet.</p>
             ) : displayList.map((item) => (
               <div key={item.id} className="svy-row">
-                <div>
-                  <p style={{ fontWeight: 600, fontSize: 14, color: PALETTE.textPrimary }}>{item.remarks}</p>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
+                <div style={{ minWidth: 0, paddingRight: 12 }}>
+                  <p style={{ fontWeight: 600, fontSize: 14, color: PALETTE.textPrimary, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {item.remarks || "Income entry"}
+                  </p>
+                  <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 10, marginTop: 8 }}>
                     <span className="svy-pill">{item.source}</span>
                     <span style={{ fontSize: 12, color: PALETTE.textLight }}>{item.date}</span>
                   </div>
                 </div>
-                <span style={{ fontWeight: 700, fontSize: 15, color: PALETTE.secondary }}>
+                <span style={{ fontWeight: 700, fontSize: 15, color: PALETTE.secondary, whiteSpace: "nowrap", flexShrink: 0 }}>
                   Rs {fmtINR(item.amount)}
                 </span>
               </div>
@@ -209,7 +217,7 @@ export default function IncomeSection({
           </div>
         </div>
 
-        <div className="svy-card" style={{ minHeight: 320 }}>
+        <div className="svy-card" style={{ minHeight: 430 }}>
           <IncomePieChart incomeList={incomeList} />
         </div>
       </div>
