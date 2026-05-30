@@ -27,7 +27,10 @@ router.post("/create-user", async (req, res) => {
     return res.status(200).json(user);
   } catch (error) {
     console.error("create-user failed", error);
-    return res.status(500).json({ error: "Failed to create or update user." });
+    return res.status(500).json({
+      error: "Failed to create or update user.",
+      code: error.code || error.name || "UNKNOWN_ERROR",
+    });
   }
 });
 
