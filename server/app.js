@@ -46,7 +46,25 @@ app.get("/api/health", (_req, res) => {
   res.status(200).json({ status: "ok", service: "savoney-api" });
 });
 
+app.get("/health", (_req, res) => {
+  res.status(200).json({ status: "ok", service: "savoney-api" });
+});
+
 app.get("/api/health/db", async (_req, res) => {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    res.status(200).json({ status: "ok", database: "connected" });
+  } catch (error) {
+    console.error("database health check failed", error);
+    res.status(503).json({
+      status: "error",
+      database: "unavailable",
+      message: "Database connection failed. Check DATABASE_URL in the deployment environment.",
+    });
+  }
+});
+
+app.get("/health/db", async (_req, res) => {
   try {
     await prisma.$queryRaw`SELECT 1`;
     res.status(200).json({ status: "ok", database: "connected" });
@@ -64,6 +82,10 @@ app.use("/api", userRoutes);
 app.use("/api", incomeRoutes);
 app.use("/api", expenseRoutes);
 app.use("/api", budgetRoutes);
+app.use("/", userRoutes);
+app.use("/", incomeRoutes);
+app.use("/", expenseRoutes);
+app.use("/", budgetRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ error: `Route not found: ${req.method} ${req.originalUrl}` });

@@ -6,6 +6,7 @@ async function request(path, options = {}) {
       "Content-Type": "application/json",
       ...options.headers,
     },
+    cache: "no-store",
     ...options,
   });
 
@@ -18,6 +19,27 @@ async function request(path, options = {}) {
   return data;
 }
 
+async function readList(path) {
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+  });
+
+  if (response.status === 404) {
+    return [];
+  }
+
+  const data = await response.json().catch(() => null);
+
+  if (!response.ok) {
+    throw new Error(data?.error || "Savoney API request failed.");
+  }
+
+  return Array.isArray(data) ? data : [];
+}
+
 export function createUser(payload) {
   return request("/api/create-user", {
     method: "POST",
@@ -26,7 +48,7 @@ export function createUser(payload) {
 }
 
 export function getIncome(clerkId) {
-  return request(`/api/income/${encodeURIComponent(clerkId)}`);
+  return readList(`/api/income/${encodeURIComponent(clerkId)}`);
 }
 
 export function addIncome(payload) {
@@ -37,7 +59,7 @@ export function addIncome(payload) {
 }
 
 export function getExpenses(clerkId) {
-  return request(`/api/expense/${encodeURIComponent(clerkId)}`);
+  return readList(`/api/expense/${encodeURIComponent(clerkId)}`);
 }
 
 export function addExpense(payload) {
@@ -48,7 +70,7 @@ export function addExpense(payload) {
 }
 
 export function getBudgets(clerkId) {
-  return request(`/api/budget/${encodeURIComponent(clerkId)}`);
+  return readList(`/api/budget/${encodeURIComponent(clerkId)}`);
 }
 
 export function addBudget(payload) {

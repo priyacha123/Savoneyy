@@ -146,7 +146,6 @@ export default function ExpenseSection({
   return (
     <section id="expense" style={{ marginTop: 64 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 28 }}>
-        <span style={{ fontSize: 22 }}>Expense</span>
         <h3 className="svy-section-title">Expense Tracking</h3>
       </div>
 

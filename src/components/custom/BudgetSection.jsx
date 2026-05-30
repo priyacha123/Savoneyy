@@ -14,7 +14,6 @@ export default function BudgetSection({
   return (
     <section id="budget" style={{ marginTop: 64 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 28 }}>
-        <span style={{ fontSize: 22 }}>Budget</span>
         <h3 className="svy-section-title">Budgeting Control</h3>
       </div>
 

@@ -145,7 +145,6 @@ export default function IncomeSection({
   return (
     <section id="income" style={{ marginTop: 64 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 28 }}>
-        <span style={{ fontSize: 22 }}>Income</span>
         <h3 className="svy-section-title">Income Insights</h3>
       </div>
 

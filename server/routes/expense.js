@@ -56,7 +56,7 @@ router.post("/expense", async (req, res) => {
 router.get("/expense/:clerkId", async (req, res) => {
   try {
     const user = await findUserByClerkId(req.params.clerkId);
-    if (!user) return res.status(404).json({ error: "User not found." });
+    if (!user) return res.status(200).json([]);
 
     const expenses = await prisma.expense.findMany({
       where: { userId: user.id },
