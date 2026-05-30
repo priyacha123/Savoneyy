@@ -2,9 +2,6 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-reac
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-
-
-/* ── Google Font injected once ── */
 const FontLink = () => {
   useEffect(() => {
     const link = document.createElement("link");
@@ -16,10 +13,8 @@ const FontLink = () => {
   return null;
 };
 
-/* ── SVG Illustrations ── */
 const WalletIllustration = () => (
   <svg viewBox="0 0 340 260" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", maxWidth: 360 }}>
-    {/* Chart bars background */}
     <rect x="170" y="60" width="22" height="120" rx="4" fill="#BFDBFE" opacity="0.6" />
     <rect x="200" y="40" width="22" height="140" rx="4" fill="#93C5FD" opacity="0.6" />
     <rect x="230" y="70" width="22" height="110" rx="4" fill="#BFDBFE" opacity="0.6" />
@@ -361,7 +356,7 @@ const S = {
   howInner: { maxWidth: 1100, margin: "0 auto" },
   stepsGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(4, 1fr)",
+    gridTemplateColumns: "repeat(6, 1fr)",
     gap: 32,
     marginTop: 52,
     position: "relative",
@@ -559,11 +554,6 @@ const features = [
     desc: "Automatically categorize every transaction and get intelligent weekly budget breakdowns tailored to your lifestyle.",
   },
   {
-    icon: <ShieldIcon />,
-    title: "Secure Account",
-    desc: "Bank-grade 256-bit encryption with two-factor authentication keeps your financial data completely safe.",
-  },
-  {
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#DBEAFE" stroke="#60A5FA" strokeWidth="1.5" />
@@ -573,17 +563,17 @@ const features = [
     title: "Real-Time Tracking",
     desc: "Watch your money move in real time. Instant notifications for every transaction so you're always in control.",
   },
-  {
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#60A5FA" strokeWidth="1.8" strokeLinecap="round" />
-        <circle cx="9" cy="7" r="4" fill="#DBEAFE" stroke="#60A5FA" strokeWidth="1.5" />
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#93C5FD" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-    title: "Family Wallets",
-    desc: "Share budgets and track household expenses together. Perfect for couples and families managing finances jointly.",
-  },
+  // {
+  //   icon: (
+  //     <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+  //       <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="#60A5FA" strokeWidth="1.8" strokeLinecap="round" />
+  //       <circle cx="9" cy="7" r="4" fill="#DBEAFE" stroke="#60A5FA" strokeWidth="1.5" />
+  //       <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="#93C5FD" strokeWidth="1.5" strokeLinecap="round" />
+  //     </svg>
+  //   ),
+  //   title: "Family Wallets",
+  //   desc: "Share budgets and track household expenses together. Perfect for couples and families managing finances jointly.",
+  // },
   {
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
@@ -594,51 +584,26 @@ const features = [
     title: "Savings Goals",
     desc: "Set savings milestones with visual progress tracking. Let Savoney coach you to hit every target on schedule.",
   },
-  {
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <rect x="2" y="3" width="20" height="14" rx="3" fill="#DBEAFE" stroke="#60A5FA" strokeWidth="1.5" />
-        <path d="M8 21h8M12 17v4" stroke="#60A5FA" strokeWidth="1.8" strokeLinecap="round" />
-        <path d="M7 8h4M7 11h6" stroke="#2E86FF" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-    title: "Detailed Reports",
-    desc: "Monthly and yearly PDF reports give you a crystal-clear picture of your financial health and spending trends.",
-  },
+  // {
+  //   icon: (
+  //     <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+  //       <rect x="2" y="3" width="20" height="14" rx="3" fill="#DBEAFE" stroke="#60A5FA" strokeWidth="1.5" />
+  //       <path d="M8 21h8M12 17v4" stroke="#60A5FA" strokeWidth="1.8" strokeLinecap="round" />
+  //       <path d="M7 8h4M7 11h6" stroke="#2E86FF" strokeWidth="1.5" strokeLinecap="round" />
+  //     </svg>
+  //   ),
+  //   title: "Detailed Reports",
+  //   desc: "Monthly and yearly PDF reports give you a crystal-clear picture of your financial health and spending trends.",
+  // },
 ];
 
 const steps = [
   { n: 1, title: "Create Account", desc: "Sign up in 30 seconds — no credit card, no commitment." },
-  { n: 2, title: "Link Your Bank", desc: "Securely connect your bank or add transactions manually." },
-  { n: 3, title: "Set Goals", desc: "Define budgets and savings targets that match your lifestyle." },
-  { n: 4, title: "Watch It Grow", desc: "Get insights, trim waste, and build wealth effortlessly." },
-];
-
-const testimonials = [
-  {
-    stars: 5,
-    text: "Savoney completely changed how I handle money. The dashboard is gorgeous and I finally know where every rupee goes.",
-    name: "Priya Sharma",
-    role: "Freelance Designer · Mumbai",
-    color: "linear-gradient(135deg,#60A5FA,#2E86FF)",
-    initials: "P",
-  },
-  {
-    stars: 5,
-    text: "I've tried every budgeting app out there. Savoney is the first one that actually stuck — the smart suggestions are spot on.",
-    name: "Arjun Mehta",
-    role: "Software Engineer · Bangalore",
-    color: "linear-gradient(135deg,#34D399,#059669)",
-    initials: "A",
-  },
-  {
-    stars: 5,
-    text: "Reached my first ₹1 lakh savings goal in 8 months. The goal tracker keeps me motivated every single day.",
-    name: "Neha Kapoor",
-    role: "Marketing Manager · Delhi",
-    color: "linear-gradient(135deg,#FBBF24,#F59E0B)",
-    initials: "N",
-  },
+  { n: 2, title: "Input your income details", desc: "Add your income details." },
+  { n: 3, title: "Input your expenses details", desc: "Add your expenses details." },
+  { n: 4, title: "Add your budgets", desc: "Add your budgets" },
+  { n: 5, title: "Filter the expenses ", desc: "Filter your expenses" },
+  { n: 6, title: "View your reports", desc: "View your reports" },
 ];
 
 /* ── Main Component ── */
@@ -899,28 +864,6 @@ export default function SavoneyLanding() {
                 </div>
               ))}
             </div>
-          </div>
-        </section>
-
-        {/* ── TESTIMONIALS ── */}
-        <section style={S.testimonials}>
-          <div style={S.sectionTag}>Reviews</div>
-          <h2 style={S.sectionH2}>Loved by thousands</h2>
-
-          <div style={S.testiGrid}>
-            {testimonials.map((t, i) => (
-              <div key={i} style={S.testiCard}>
-                <div style={S.stars}>{"★".repeat(t.stars)}</div>
-                <div style={S.testiText}>"{t.text}"</div>
-                <div style={S.testiAuthor}>
-                  <div style={{ ...S.avatar, background: t.color }}>{t.initials}</div>
-                  <div>
-                    <div style={S.authorName}>{t.name}</div>
-                    <div style={S.authorRole}>{t.role}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </section>
 
