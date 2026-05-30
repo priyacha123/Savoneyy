@@ -27,11 +27,11 @@ async function readList(path) {
     cache: "no-store",
   });
 
-  if (response.status === 404) {
+  const data = await response.json().catch(() => null);
+
+  if (response.status === 404 && data?.error === "User not found.") {
     return [];
   }
-
-  const data = await response.json().catch(() => null);
 
   if (!response.ok) {
     throw new Error(data?.error || "Savoney API request failed.");
